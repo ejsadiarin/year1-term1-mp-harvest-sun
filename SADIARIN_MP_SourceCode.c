@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 
 /*
@@ -125,25 +126,34 @@ void displayMainMenuOptions(struct PlayerStatus *player) {
  * @return
  *
  * */
-int checkIfDead(struct PlayerStatus player) {
-  int starvedDay = player.starvedDay;
+int checkIfDead(struct PlayerStatus *player, bool *isPlayerDead) {
+  // if 3/3 starvedDay not die, next day: die (die at 4th day when starving)
+  // this is passed by value, so it copies it into a new variable (not modifies
+  // the original):
+  // int starvedDay = player->starvedDay;
 
-  switch (starvedDay) {
+  if (player->gold < 10) {
+    player->starvedDay += 1;
+  }
+
+  switch (player->starvedDay) {
   case 1:
+    printf("\n!!! *************** WARNING *************** !!!\n");
     printf("WARNING: your hunger status increased!\n");
     printf("Make sure to have enough gold (10g) to eat breakfast next day\n");
     printf("If hunger becomes 3/3, you will INEVITABLY DIE the next day\n");
     break;
   case 2:
+    printf("WARNING: your hunger status increased!\n");
     break;
   case 3:
+    printf("WARNING: your hunger status increased!\n");
     break;
   case 4:
-    // starvedDay or Hunger 3/3 then when go home (triggers next day):
-    // player dies
+    printf("\nYou died due to starvation. Git gud!\n");
+    *isPlayerDead = true;
     break;
   default:
-    printf("Starve Day Bug: doesn't die on starveDay == 4");
     break;
   }
 
@@ -288,28 +298,29 @@ void goToFarm(struct PlayerStatus *player) {
  * @return
  *
  * */
-void goHome(struct PlayerStatus *player) {
-  // increment day (sleep)
-  player->day += 1;
+void goHome(struct PlayerStatus *player, bool *isPlayerDead) {
 
-  // have a checkHunger checkStarvedDay function here
-  // check starvedDay hunger status
-  // if 3/3 stravedDay not die, next day: die (die at 4th day when starving)
+  checkIfDead(player, isPlayerDead);
 
-  // printf("\n---------------------------------");
-  printf("\n********************************* ");
-  printf("Day %d", player->day);
-  printf(" *********************************\n\n");
-  // printf("---------------------------------\n\n");
+  if (*isPlayerDead == false) {
 
-  // reset energy to full
-  printf("REJUVENATED! Energy has been reset to full\n");
-  player->energy = 30;
+    // increment day (sleep)
+    player->day += 1;
 
-  // tax gold for breakfast
-  printf("-10 gold for eating breakfast\n");
-  printf("Eating breakfast... nom nom nom\n\n");
-  player->gold -= 10;
+    printf("\n********************************* ");
+    printf("Day %d", player->day);
+    printf(" *********************************\n\n");
+
+    // reset energy to full
+    printf("REJUVENATED! Energy has been reset to full\n");
+    player->energy = 30;
+
+    // tax gold for breakfast & update hunger status
+    printf("-10 gold for eating breakfast\n");
+    printf("Eating breakfast... nom nom nom\n\n");
+
+    player->gold -= 10;
+  }
 }
 
 /* Shop function
@@ -358,6 +369,7 @@ int main() {
   player.starvedDay = 0;
 
   int playerChoice;
+  bool isPlayerDead = false;
 
   printf("******* WELCOME TO HARVEST SUN *******\n");
   printf(" _   _                           _     _____             \n");
@@ -375,7 +387,7 @@ int main() {
     switch (playerChoice) {
     case 1:
       printf("\nYou chose to Go Home. Have a wonderful rest!\n");
-      goHome(&player);
+      goHome(&player, &isPlayerDead);
       break;
     case 2:
       printf("\nYou chose to Go to the Farm!\n");
@@ -392,7 +404,7 @@ int main() {
     default:
       printf("\nInvalid input! Enter numbers 1-4 only.\n");
     }
-  } while (playerChoice != 4);
+  } while (playerChoice != 4 && isPlayerDead == false);
 
   return 0;
 }
