@@ -41,6 +41,61 @@ struct FarmStatus {
   int corn;
 };
 
+void displayMainMenuOptions(struct PlayerStatus *player) {
+
+  printf("----------------------------------------\n");
+  printf("|    ***** Choose your Action *****    |\n");
+  printf("----------------------------------------\n");
+  printf("Current Status:\n");
+  printf("Gold: %dG\n", player->gold);
+  printf("Energy: %d/30\n", player->energy);
+  printf("Hunger: %d/3\n", player->starvedDay);
+  printf("----------------------------------------\n");
+  printf("Enter 1 - Go Home\n");
+  printf("Enter 2 - Go to the Farm\n");
+  printf("Enter 3 - Go to Shop\n");
+  printf("Enter 4 - Quit\n");
+  printf("----------------------------------------\n");
+  printf("Enter the number of your desired action: ");
+  /*
+   * - can use switch for option prompts (1, 2, 3, etc.)
+   * - use do while loop here? or do while loop outside and calling this
+   * function
+   *
+   * Home
+   * - automatically sleep (go to next day, day++)
+   * - increments day (day++)
+   * - restores full energy for the FOLLOWING DAY ()
+   * - eats breakfast:
+   *   - costs 10 gold (automatically charged at start of the day)
+   *
+   * Farm
+   * - every action in the farm consumes energy
+   * - if no energy, they cannot go to farm (so this checks for energy value)
+   * - have option to go back to main menu
+   * - has 4 player actions/options:
+   *   (1) Till Plots
+   *   (2) Sow Seeds
+   *   (3) Water Crops
+   *   (4) Harvest Crops
+   *   (5) Go back to main menu
+   *
+   * Shop
+   * - can buy seeds
+   * - can sell crops
+   * - does NOT CONSUME energy
+   * - actions/options:
+   *   (1) Buy Seeds
+   *   (2) Sell Crops
+   *   (3) Go back to main menu
+   *
+   * Quit
+   * - print "thank you for playing!"
+   * - terminates program (return 0?)
+   *
+   * */
+}
+
 /*
  * starveCounter() --> checks if player did not eat, call this function everyday
  * (at start of next day)
@@ -211,7 +266,8 @@ void goToFarm(struct PlayerStatus *player) {
     break;
   case 5:
     printf("Going back to main menu...\n");
-    // function here
+    // no need since this goToFarm function is inside another switch case that
+    // have a do while loop displayMainMenuOptions(player);
     break;
   default:
     // checks if int input is valid
@@ -293,93 +349,6 @@ void goHome(struct PlayerStatus *player) {
  * @return
  *
  * */
-void displayMainMenuOptions(struct PlayerStatus *player) {
-  int playerChoice;
-  // TODO check for valid datatype for input (should be int only) to not cause
-  // an infinite loop
-  // bool isInt = sizeof(playerChoice) == sizeof(int);
-
-  do {
-    printf("----------------------------------------\n");
-    printf("|    ***** Choose your Action *****    |\n");
-    printf("----------------------------------------\n");
-    printf("Current Status:\n");
-    printf("Gold: %dG\n", player->gold);
-    printf("Energy: %d/30\n", player->energy);
-    printf("Hunger: %d/3\n", player->starvedDay);
-    printf("----------------------------------------\n");
-    printf("Enter 1 - Go Home\n");
-    printf("Enter 2 - Go to the Farm\n");
-    printf("Enter 3 - Go to Shop\n");
-    printf("Enter 4 - Quit\n");
-    printf("----------------------------------------\n");
-    printf("Enter the number of your desired action: ");
-
-    scanf("%d", &playerChoice);
-
-    switch (playerChoice) {
-    case 1:
-      printf("You chose to Go Home. Have a wonderful rest!\n");
-      goHome(player);
-      displayMainMenuOptions(player);
-      break;
-    case 2:
-      printf("You chose to Go to the Farm!\n");
-      goToFarm(player);
-      // function here
-      break;
-    case 3:
-      printf("You chose to Go to Shop!\n");
-      // function here
-      break;
-    case 4:
-      printf("Thank you for playing Harvest Sun!");
-      // function here
-      break;
-    default:
-      // checks if int input is valid
-      printf("Invalid input! Enter numbers 1-4 only.");
-      // displayMainMenuOptions(player);
-    }
-  } while (playerChoice != 4);
-  /*
-   * - can use switch for option prompts (1, 2, 3, etc.)
-   * - use do while loop here? or do while loop outside and calling this
-   * function
-   *
-   * Home
-   * - automatically sleep (go to next day, day++)
-   * - increments day (day++)
-   * - restores full energy for the FOLLOWING DAY ()
-   * - eats breakfast:
-   *   - costs 10 gold (automatically charged at start of the day)
-   *
-   * Farm
-   * - every action in the farm consumes energy
-   * - if no energy, they cannot go to farm (so this checks for energy value)
-   * - have option to go back to main menu
-   * - has 4 player actions/options:
-   *   (1) Till Plots
-   *   (2) Sow Seeds
-   *   (3) Water Crops
-   *   (4) Harvest Crops
-   *   (5) Go back to main menu
-   *
-   * Shop
-   * - can buy seeds
-   * - can sell crops
-   * - does NOT CONSUME energy
-   * - actions/options:
-   *   (1) Buy Seeds
-   *   (2) Sell Crops
-   *   (3) Go back to main menu
-   *
-   * Quit
-   * - print "thank you for playing!"
-   * - terminates program (return 0?)
-   *
-   * */
-}
 
 int main() {
   struct PlayerStatus player;
@@ -387,6 +356,8 @@ int main() {
   player.energy = 30;
   player.day = 1;
   player.starvedDay = 0;
+
+  int playerChoice;
 
   printf("******* WELCOME TO HARVEST SUN *******\n");
   printf(" _   _                           _     _____             \n");
@@ -397,7 +368,31 @@ int main() {
   printf("\\_| |_/\\__,_|_|    \\_/ \\___||___/\\__| \\____/ \\__,_|_| |_|\n");
   printf("                                                         \n");
   printf("                                                         \n");
-  displayMainMenuOptions(&player);
+  do {
+    displayMainMenuOptions(&player);
+    scanf("%d", &playerChoice);
+
+    switch (playerChoice) {
+    case 1:
+      printf("You chose to Go Home. Have a wonderful rest!\n");
+      goHome(&player);
+      break;
+    case 2:
+      printf("You chose to Go to the Farm!\n");
+      goToFarm(&player);
+      break;
+    case 3:
+      printf("You chose to Go to Shop!\n");
+      // function here
+      break;
+    case 4:
+      printf("Thank you for playing Harvest Sun!\n");
+      // function here
+      break;
+    default:
+      printf("Invalid input! Enter numbers 1-4 only.\n");
+    }
+  } while (playerChoice != 4);
 
   return 0;
 }
