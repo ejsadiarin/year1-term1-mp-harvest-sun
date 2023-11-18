@@ -159,11 +159,11 @@ void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("Energy: %d/30\n", player->energy);
   printf("----------------------------------------\n");
   // show crops here (Banana, Mango, Corn)
-  printf("Tilled plots: %d/30", farm->tilledPlots);
-  printf("Untilled plots: %d/30", farm->untilledPlots);
-  printf("Planted bananas: %d/30", farm->banana);
-  printf("Planted mangoes: %d/30", farm->mango);
-  printf("Planted corn: %d/30", farm->corn);
+  printf("Tilled plots: %d/30\n", farm->tilledPlots);
+  printf("Untilled plots: %d/30\n", farm->untilledPlots);
+  printf("Planted bananas: %d/30\n", farm->banana);
+  printf("Planted mangoes: %d/30\n", farm->mango);
+  printf("Planted corn: %d/30\n", farm->corn);
   printf("----------------------------------------\n");
   printf("Enter 1 - Till plots\n");
   printf("Enter 2 - Sow seeds\n");
@@ -249,29 +249,29 @@ void goToFarm(struct PlayerStatus *player) {
 
   switch (playerChoice) {
   case 1:
-    printf("You chose to till plots\n");
+    printf("\nYou chose to till plots\n");
     // function here
     break;
   case 2:
-    printf("You chose to sow seeds\n");
+    printf("\nYou chose to sow seeds\n");
     // function here
     break;
   case 3:
-    printf("You chose to water crops!\n");
+    printf("\nYou chose to water crops!\n");
     // function here
     break;
   case 4:
-    printf("You chose to harvest crops!\n");
+    printf("\nYou chose to harvest crops!\n");
     // function here
     break;
   case 5:
-    printf("Going back to main menu...\n");
+    printf("\nGoing back to main menu...\n");
     // no need since this goToFarm function is inside another switch case that
     // have a do while loop displayMainMenuOptions(player);
     break;
   default:
     // checks if int input is valid
-    printf("Invalid input! Enter numbers 1-4 only.");
+    printf("\nInvalid input! Enter numbers 1-4 only.\n");
     goToFarm(player);
   }
 }
@@ -374,23 +374,23 @@ int main() {
 
     switch (playerChoice) {
     case 1:
-      printf("You chose to Go Home. Have a wonderful rest!\n");
+      printf("\nYou chose to Go Home. Have a wonderful rest!\n");
       goHome(&player);
       break;
     case 2:
-      printf("You chose to Go to the Farm!\n");
+      printf("\nYou chose to Go to the Farm!\n");
       goToFarm(&player);
       break;
     case 3:
-      printf("You chose to Go to Shop!\n");
+      printf("\nYou chose to Go to Shop!\n");
       // function here
       break;
     case 4:
-      printf("Thank you for playing Harvest Sun!\n");
+      printf("\nThank you for playing Harvest Sun!\n");
       // function here
       break;
     default:
-      printf("Invalid input! Enter numbers 1-4 only.\n");
+      printf("\nInvalid input! Enter numbers 1-4 only.\n");
     }
   } while (playerChoice != 4);
 
