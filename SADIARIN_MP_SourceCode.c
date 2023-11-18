@@ -138,16 +138,19 @@ int checkIfDead(struct PlayerStatus *player, bool *isPlayerDead) {
 
   switch (player->starvedDay) {
   case 1:
-    printf("\n!!! *************** WARNING *************** !!!\n");
-    printf("WARNING: your hunger status increased!\n");
-    printf("Make sure to have enough gold (10g) to eat breakfast next day\n");
-    printf("If hunger becomes 3/3, you will INEVITABLY DIE the next day\n");
+    printf("\n\n\n!!!!!!! >>>>>>>>>>>>>> WARNING <<<<<<<<<<<<<<<<< !!!!!!!\n");
+    printf("[ STARVATION WARNING ]: your hunger status increased!\n");
+    printf("[ REMINDER ]: Make sure to have enough gold (10g) to eat breakfast next day\n");
+    printf("[ REMINDER ]: If your hunger becomes 3/3, you will INEVITABLY DIE the next day\n");
     break;
   case 2:
-    printf("WARNING: your hunger status increased!\n");
+    printf("\n\n\n!!!!!!! >>>>>>>>>>>>>> WARNING <<<<<<<<<<<<<<<<< !!!!!!!\n");
+    printf("[ STARVATION WARNING ]: your hunger status increased to 2/3!\n");
+    printf("[ STARVATION CRISIS ]: EARN 10 GOLD NOW TO EAT BREAKFAST\n");
     break;
   case 3:
-    printf("WARNING: your hunger status increased!\n");
+    printf("\n\n\n!!!!!!! >>>>>>>>>>>>>> WARNING <<<<<<<<<<<<<<<<< !!!!!!!\n");
+    printf("[ STARVATION DISASTER ]: YOUR HUNGER IS NOW 3/3, you will INEVITABLY DIE the next day.\n");
     break;
   case 4:
     printf("\nYou died due to starvation. Git gud!\n");
@@ -399,7 +402,6 @@ int main() {
       break;
     case 4:
       printf("\nThank you for playing Harvest Sun!\n");
-      // function here
       break;
     default:
       printf("\nInvalid input! Enter numbers 1-4 only.\n");
