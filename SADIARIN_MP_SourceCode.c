@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include <stdio.h>
 
 /*
@@ -34,6 +33,33 @@ struct PlayerStatus {
   int starvedDay;
 };
 
+struct FarmStatus {
+  int tilledPlots;
+  int untilledPlots;
+  int banana;
+  int mango;
+  int corn;
+};
+
+/*
+ * starveCounter() --> checks if player did not eat, call this function everyday
+ * (at start of next day)
+ * - has variable to mutate:
+ *   int straveDay = 0;
+ * if gold > 10: --> since breakfast costs 10 gold
+ *  - increment/mutate starveDay variable:
+ *       starveDay++;
+ *  - then nested conditions:
+ *    if starveDay == 1:
+ *      - then warning for player
+ *    if starveDay == 2:
+ *      - then warning for player
+ *    if starveDay == 3:
+ *      - then warning for player
+ *    if starveDay == 4:
+ *      - inform that player dies/loses/starves
+ *      - force quit game (call quit() function)
+ * */
 /*
  * This function
  *
@@ -69,25 +95,132 @@ int checkIfDead(struct PlayerStatus player) {
   return 0;
 }
 
+/* **************** FARM RELATED FUNCTIONS START ***************** */
+
+void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
+  printf("----------------------------------------\n");
+  printf("|    ***** Your Farm Status *****    |\n");
+  printf("----------------------------------------\n");
+  printf("Energy: %d/30\n", player->energy);
+  printf("----------------------------------------\n");
+  // show crops here (Banana, Mango, Corn)
+  printf("Tilled plots: %d/30", farm->tilledPlots);
+  printf("Untilled plots: %d/30", farm->untilledPlots);
+  printf("Planted bananas: %d/30", farm->banana);
+  printf("Planted mangoes: %d/30", farm->mango);
+  printf("Planted corn: %d/30", farm->corn);
+  printf("----------------------------------------\n");
+  printf("Enter 1 - Till plots\n");
+  printf("Enter 2 - Sow seeds\n");
+  printf("Enter 3 - Water crops\n");
+  printf("Enter 4 - Harvest crops\n");
+  printf("Enter 5 - Go to main menu\n");
+  printf("----------------------------------------\n");
+}
+
 /*
- * starveCounter() --> checks if player did not eat, call this function everyday
- * (at start of next day)
- * - has variable to mutate:
- *   int straveDay = 0;
- * if gold > 10: --> since breakfast costs 10 gold
- *  - increment/mutate starveDay variable:
- *       starveDay++;
- *  - then nested conditions:
- *    if starveDay == 1:
- *      - then warning for player
- *    if starveDay == 2:
- *      - then warning for player
- *    if starveDay == 3:
- *      - then warning for player
- *    if starveDay == 4:
- *      - inform that player dies/loses/starves
- *      - force quit game (call quit() function)
+ * Farm function
+ * - every action in the farm consumes energy
+ * - if no energy, they cannot go to farm (so this checks for energy value)
+ *
+ * (1) Till Plots
+ * - 30 plots in total
+ * - ask player how many to till (prompt)
+ * - 1 plot = 1 energy consumed
+ * - plot = "untilled" --turn into---> plot = "tilled"
+ *
+ * (2) Sow Seeds
+ * - 1 bag of seed per tilled plot
+ * - only way to get bag of seed is to buy seed at shop
+ * - 3 seeds:
+ *   (1) Banana
+ *   (2) Corn
+ *   (3) Mango
+ * - can only perform this action if plot is "tilled"
+ *   - check if plot is tilled
+ * - cannot sow seeds if same type of seed is planted and not yet harvested
+ *   - For example, if bananas are already planted and not yet harvested, it
+ *     cannot be planted again yet
+ *   - check if same type of seed is planted
+ *
+ *
+ * - check if bags of seed are "enough" (TODO: limit: ?)
+ *
+ * - check if energy is enough to sow seeds on tilled plots
+ *   - 1 energy consumed = 1 sow seed on a tilled plot
+ *   - For example, if 10 bags of mango seeds will be sown on 10 tilled plots,
+ *     then 10 energy will be consumed.
+ *
+ *  How to get bag of seed?
+ * - buy from shop using gold
+ *
+ * (3) Water Crops
+ * - can only water the same type of crops once a day
+ *  - prompt player what type of crops to water
+ *  - check if type of crops is not yet "watered",
+ *    - if "watered" then display "it is watered, go next day to water again"
+ * message
+ *    - if not, check if player has enough energy to water (all same type of
+ *      crop will be watered)
+ *      - example: if 20 plot with banana planted = 20 energy will be consumed
+ *
+ * (4) Harvest Crops
+ * - player can harvest if crop is watered certain number of times
+ *   - prompt user what to harvest
+ *   - then check if it ready to be harvested
+ *   Banana - 4 water times to be harvested
+ *   Corn - 6 ...
+ *   Mango - 8 ...
+ *
+ * - 1 kg of crop harvest = 1 plot
+ * - 1 plot harvest = 1 energy will be consumed
+ *
+ * (5) Go back to main menu
+ *
  * */
+void goToFarm(struct PlayerStatus *player) {
+  struct FarmStatus farm;
+  farm.tilledPlots = 0;
+  farm.untilledPlots = 0;
+  farm.banana = 0;
+  farm.mango = 0;
+  farm.corn = 0;
+
+  int playerChoice;
+
+  displayFarmOptions(player, &farm);
+  printf("Enter the number of your desired action: ");
+  scanf("%d", &playerChoice);
+
+  switch (playerChoice) {
+  case 1:
+    printf("You chose to till plots\n");
+    // function here
+    break;
+  case 2:
+    printf("You chose to sow seeds\n");
+    // function here
+    break;
+  case 3:
+    printf("You chose to water crops!\n");
+    // function here
+    break;
+  case 4:
+    printf("You chose to harvest crops!\n");
+    // function here
+    break;
+  case 5:
+    printf("Going back to main menu...\n");
+    // function here
+    break;
+  default:
+    // checks if int input is valid
+    printf("Invalid input! Enter numbers 1-4 only.");
+    goToFarm(player);
+  }
+}
+
+/* **************** FARM RELATED FUNCTIONS END ***************** */
 
 /*
  * This function
@@ -166,50 +299,49 @@ void displayMainMenuOptions(struct PlayerStatus *player) {
   // an infinite loop
   // bool isInt = sizeof(playerChoice) == sizeof(int);
 
-  printf("----------------------------------------\n");
-  printf("|    ***** Choose your Action *****    |\n");
-  printf("----------------------------------------\n");
-  printf("Current Status:\n");
-  printf("Gold: %dG\n", player->gold);
-  printf("Energy: %d/30\n", player->energy);
-  printf("Hunger: %d/3\n", player->starvedDay);
-  printf("----------------------------------------\n");
-  printf("Enter 1 - Go Home\n");
-  printf("Enter 2 - Go to the Farm\n");
-  printf("Enter 3 - Go to Shop\n");
-  printf("Enter 4 - Quit\n");
-  printf("----------------------------------------\n");
-  printf("Enter the number of your desired action: ");
+  do {
+    printf("----------------------------------------\n");
+    printf("|    ***** Choose your Action *****    |\n");
+    printf("----------------------------------------\n");
+    printf("Current Status:\n");
+    printf("Gold: %dG\n", player->gold);
+    printf("Energy: %d/30\n", player->energy);
+    printf("Hunger: %d/3\n", player->starvedDay);
+    printf("----------------------------------------\n");
+    printf("Enter 1 - Go Home\n");
+    printf("Enter 2 - Go to the Farm\n");
+    printf("Enter 3 - Go to Shop\n");
+    printf("Enter 4 - Quit\n");
+    printf("----------------------------------------\n");
+    printf("Enter the number of your desired action: ");
 
-  scanf("%d", &playerChoice);
+    scanf("%d", &playerChoice);
 
-  switch (playerChoice) {
-  case 1:
-    printf("You chose to Go Home. Have a wonderful rest!\n");
-    goHome(player);
-    displayMainMenuOptions(player);
-    break;
-  case 2:
-    printf("You chose to Go to the Farm!\n");
-    // function here
-    break;
-  case 3:
-    printf("You chose to Go to Shop!\n");
-    // function here
-    break;
-  case 4:
-    printf("Thank you for playing Harvest Sun!");
-    // function here
-    break;
-  default:
-    // checks if int input is valid
-    printf("Invalid input! Enter numbers 1-4 only.");
-    displayMainMenuOptions(player);
-  }
-
-  // prompt player again if input is not valid a datatype for playerChoice
-  displayMainMenuOptions(player);
-
+    switch (playerChoice) {
+    case 1:
+      printf("You chose to Go Home. Have a wonderful rest!\n");
+      goHome(player);
+      displayMainMenuOptions(player);
+      break;
+    case 2:
+      printf("You chose to Go to the Farm!\n");
+      goToFarm(player);
+      // function here
+      break;
+    case 3:
+      printf("You chose to Go to Shop!\n");
+      // function here
+      break;
+    case 4:
+      printf("Thank you for playing Harvest Sun!");
+      // function here
+      break;
+    default:
+      // checks if int input is valid
+      printf("Invalid input! Enter numbers 1-4 only.");
+      // displayMainMenuOptions(player);
+    }
+  } while (playerChoice != 4);
   /*
    * - can use switch for option prompts (1, 2, 3, etc.)
    * - use do while loop here? or do while loop outside and calling this
@@ -249,124 +381,12 @@ void displayMainMenuOptions(struct PlayerStatus *player) {
    * */
 }
 
-/*
- * Farm function
- * - every action in the farm consumes energy
- * - if no energy, they cannot go to farm (so this checks for energy value)
- *
- * (1) Till Plots
- * - 30 plots in total
- * - ask player how many to till (prompt)
- * - 1 plot = 1 energy consumed
- * - plot = "untilled" --turn into---> plot = "tilled"
- *
- * (2) Sow Seeds
- * - 1 bag of seed per tilled plot
- * - only way to get bag of seed is to buy seed at shop
- * - 3 seeds:
- *   (1) Banana
- *   (2) Corn
- *   (3) Mango
- * - can only perform this action if plot is "tilled"
- *   - check if plot is tilled
- * - cannot sow seeds if same type of seed is planted and not yet harvested
- *   - For example, if bananas are already planted and not yet harvested, it
- *     cannot be planted again yet
- *   - check if same type of seed is planted
- *
- *
- * - check if bags of seed are "enough" (TODO: limit: ?)
- *
- * - check if energy is enough to sow seeds on tilled plots
- *   - 1 energy consumed = 1 sow seed on a tilled plot
- *   - For example, if 10 bags of mango seeds will be sown on 10 tilled plots,
- *     then 10 energy will be consumed.
- *
- *  How to get bag of seed?
- * - buy from shop using gold
- *
- * (3) Water Crops
- * - can only water the same type of crops once a day
- *  - prompt player what type of crops to water
- *  - check if type of crops is not yet "watered",
- *    - if "watered" then display "it is watered, go next day to water again"
- * message
- *    - if not, check if player has enough energy to water (all same type of
- *      crop will be watered)
- *      - example: if 20 plot with banana planted = 20 energy will be consumed
- *
- * (4) Harvest Crops
- * - player can harvest if crop is watered certain number of times
- *   - prompt user what to harvest
- *   - then check if it ready to be harvested
- *   Banana - 4 water times to be harvested
- *   Corn - 6 ...
- *   Mango - 8 ...
- *
- * - 1 kg of crop harvest = 1 plot
- * - 1 plot harvest = 1 energy will be consumed
- *
- * (5) Go back to main menu
- *
- * */
-void goToFarm(struct PlayerStatus *player) {
-  int playerChoice;
-
-  printf("----------------------------------------\n");
-  printf("|    ***** Your Farm Status *****    |\n");
-  printf("----------------------------------------\n");
-  printf("Gold: %dG\n", player->gold);
-  printf("Energy: %d/30\n", player->energy);
-  printf("Hunger: %d/3\n", player->starvedDay);
-  printf("----------------------------------------\n");
-  printf("Enter 1 - Till plots\n");
-  printf("Enter 2 - Sow seeds\n");
-  printf("Enter 3 - Water crops\n");
-  printf("Enter 4 - Harvest crops\n");
-  printf("Enter 5 - Go to main menu\n");
-  printf("----------------------------------------\n");
-  printf("Enter the number of your desired action: ");
-  scanf("%d", &playerChoice);
-
-  switch (playerChoice) {
-  case 1:
-    printf("You chose to till plots");
-    goHome(player);
-    // display recursive func goToFarm()
-    break;
-  case 2:
-    printf("You chose to sow seeds");
-    // function here
-    break;
-  case 3:
-    printf("You chose to water crops!");
-    // function here
-    break;
-  case 4:
-    printf("You chose to harvest crops!");
-    // function here
-    break;
-  case 5:
-    printf("Thank you for playing Harvest Sun!");
-    // function here
-    break;
-  default:
-    // checks if int input is valid
-    printf("Invalid input! Enter numbers 1-4 only.");
-    displayMainMenuOptions(player);
-  }
-}
-
 int main() {
   struct PlayerStatus player;
   player.gold = 50;
   player.energy = 30;
   player.day = 1;
   player.starvedDay = 0;
-  // int gold = 50;
-  // int energy = 30;
-  // int day = 1;
-  // int starvedDay = 0;
 
   printf("******* WELCOME TO HARVEST SUN *******\n");
   printf(" _   _                           _     _____             \n");
