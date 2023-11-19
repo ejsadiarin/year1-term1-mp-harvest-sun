@@ -140,8 +140,10 @@ int checkIfDead(struct PlayerStatus *player, bool *isPlayerDead) {
   case 1:
     printf("\n\n\n!!!!!!! >>>>>>>>>>>>>> WARNING <<<<<<<<<<<<<<<<< !!!!!!!\n");
     printf("[ STARVATION WARNING ]: your hunger status increased!\n");
-    printf("[ REMINDER ]: Make sure to have enough gold (10g) to eat breakfast next day\n");
-    printf("[ REMINDER ]: If your hunger becomes 3/3, you will INEVITABLY DIE the next day\n");
+    printf("[ REMINDER ]: Make sure to have enough gold (10g) to eat breakfast "
+           "next day\n");
+    printf("[ REMINDER ]: If your hunger becomes 3/3, you will INEVITABLY DIE "
+           "the next day\n");
     break;
   case 2:
     printf("\n\n\n!!!!!!! >>>>>>>>>>>>>> WARNING <<<<<<<<<<<<<<<<< !!!!!!!\n");
@@ -150,7 +152,8 @@ int checkIfDead(struct PlayerStatus *player, bool *isPlayerDead) {
     break;
   case 3:
     printf("\n\n\n!!!!!!! >>>>>>>>>>>>>> WARNING <<<<<<<<<<<<<<<<< !!!!!!!\n");
-    printf("[ STARVATION DISASTER ]: YOUR HUNGER IS NOW 3/3, you will INEVITABLY DIE the next day.\n");
+    printf("[ STARVATION DISASTER ]: YOUR HUNGER IS NOW 3/3, you will "
+           "INEVITABLY DIE the next day.\n");
     break;
   case 4:
     printf("\nYou died due to starvation. Git gud!\n");
@@ -186,6 +189,38 @@ void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("----------------------------------------\n");
 }
 
+void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
+  int plotsToTill;
+
+  do {
+    // error handle, prompts player again until correct conditions are met
+    printf("Enter amount of plots to till (enter 0 to cancel): ");
+    scanf(" %d", &plotsToTill);
+
+    if (plotsToTill == 0) {
+      return;
+    }
+
+    // check if player have enough energy
+    if (player->energy < plotsToTill) {
+      printf("\nEnergy is not sufficient.\n");
+    }
+    // check if farm have enough untilledPlots to be tilledPlots
+    if (farm->untilledPlots < plotsToTill) {
+      printf("Not enough untilled plots to till\n");
+    }
+  } while (player->energy < plotsToTill || farm->untilledPlots < plotsToTill);
+
+  printf("\nNOTICE: Farm has been updated\n");
+  // if player has enough energy then energy - plotsToTill
+  player->energy -= plotsToTill;
+
+  // update tilledPlots based on plotsToTill input from player
+  farm->tilledPlots += plotsToTill;
+
+  // update untilledPlots (subtract to how many are now tilledPlots)
+  farm->untilledPlots -= plotsToTill;
+}
 /*
  * Farm function
  * - every action in the farm consumes energy
@@ -246,47 +281,43 @@ void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
  * (5) Go back to main menu
  *
  * */
-void goToFarm(struct PlayerStatus *player) {
-  struct FarmStatus farm;
-  farm.tilledPlots = 0;
-  farm.untilledPlots = 0;
-  farm.banana = 0;
-  farm.mango = 0;
-  farm.corn = 0;
+void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
 
   int playerChoice;
 
-  displayFarmOptions(player, &farm);
-  printf("Enter the number of your desired action: ");
-  scanf("%d", &playerChoice);
+  do {
+    displayFarmOptions(player, farm);
 
-  switch (playerChoice) {
-  case 1:
-    printf("\nYou chose to till plots\n");
-    // function here
-    break;
-  case 2:
-    printf("\nYou chose to sow seeds\n");
-    // function here
-    break;
-  case 3:
-    printf("\nYou chose to water crops!\n");
-    // function here
-    break;
-  case 4:
-    printf("\nYou chose to harvest crops!\n");
-    // function here
-    break;
-  case 5:
-    printf("\nGoing back to main menu...\n");
-    // no need since this goToFarm function is inside another switch case that
-    // have a do while loop displayMainMenuOptions(player);
-    break;
-  default:
-    // checks if int input is valid
-    printf("\nInvalid input! Enter numbers 1-4 only.\n");
-    goToFarm(player);
-  }
+    printf("Enter the number of your desired action: ");
+    scanf("%d", &playerChoice);
+
+    switch (playerChoice) {
+    case 1:
+      printf("\nYou chose to till plots\n");
+      tillPlots(player, farm);
+      break;
+    case 2:
+      printf("\nYou chose to sow seeds\n");
+      // function here
+      break;
+    case 3:
+      printf("\nYou chose to water crops!\n");
+      // function here
+      break;
+    case 4:
+      printf("\nYou chose to harvest crops!\n");
+      // function here
+      break;
+    case 5:
+      printf("\nGoing back to main menu...\n");
+      // no need since this goToFarm function is inside another switch case that
+      // have a do while loop displayMainMenuOptions(player);
+      break;
+    default:
+      // checks if int input is valid
+      printf("\nInvalid input! Enter numbers 1-5 only.\n");
+    }
+  } while (playerChoice != 5);
 }
 
 /* **************** FARM RELATED FUNCTIONS END ***************** */
@@ -371,6 +402,13 @@ int main() {
   player.day = 1;
   player.starvedDay = 0;
 
+  struct FarmStatus farm;
+  farm.tilledPlots = 0;
+  farm.untilledPlots = 30;
+  farm.banana = 0;
+  farm.mango = 0;
+  farm.corn = 0;
+
   int playerChoice;
   bool isPlayerDead = false;
 
@@ -394,7 +432,7 @@ int main() {
       break;
     case 2:
       printf("\nYou chose to Go to the Farm!\n");
-      goToFarm(&player);
+      goToFarm(&player, &farm);
       break;
     case 3:
       printf("\nYou chose to Go to Shop!\n");
