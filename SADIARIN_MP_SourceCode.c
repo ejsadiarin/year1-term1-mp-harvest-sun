@@ -32,14 +32,17 @@ struct PlayerStatus {
   int energy;
   int day;
   int starvedDay;
+  int bananaSeeds;
+  int mangoSeeds;
+  int cornSeeds;
 };
 
 struct FarmStatus {
   int tilledPlots;
   int untilledPlots;
-  int banana;
-  int mango;
-  int corn;
+  int bananaPlots;
+  int mangoPlots;
+  int cornPlots;
 };
 
 void displayMainMenuOptions(struct PlayerStatus *player) {
@@ -177,9 +180,9 @@ void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
   // show crops here (Banana, Mango, Corn)
   printf("Tilled plots: %d/30\n", farm->tilledPlots);
   printf("Untilled plots: %d/30\n", farm->untilledPlots);
-  printf("Planted bananas: %d/30\n", farm->banana);
-  printf("Planted mangoes: %d/30\n", farm->mango);
-  printf("Planted corn: %d/30\n", farm->corn);
+  printf("Planted bananas: %d/30\n", farm->bananaPlots);
+  printf("Planted mangoes: %d/30\n", farm->mangoPlots);
+  printf("Planted corn: %d/30\n", farm->cornPlots);
   printf("----------------------------------------\n");
   printf("Enter 1 - Till plots\n");
   printf("Enter 2 - Sow seeds\n");
@@ -220,6 +223,60 @@ void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
 
   // update untilledPlots (subtract to how many are now tilledPlots)
   farm->untilledPlots -= plotsToTill;
+}
+
+void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
+  int seedsToSow, typeOfSeed;
+
+  printf("----------------------------------------\n");
+  printf("**** Inventory: ****\n");
+  printf("Banana Seeds (Bag): %d\n", player->bananaSeeds);
+  printf("Mango Seeds (Bag): %d\n", player->mangoSeeds);
+  printf("Corn Seeds (Bag): %d\n", player->cornSeeds);
+  printf("----------------------------------------\n");
+  printf("**** Farm Status: ****\n");
+  printf("Tilled plots: %d/30\n", farm->tilledPlots);
+  // TODO: this
+  printf("Banana plots planted: %d/30\n", farm->tilledPlots);
+  printf("Tilled plots: %d/30\n", farm->tilledPlots);
+  printf("Tilled plots: %d/30\n", farm->tilledPlots);
+  printf("----------------------------------------\n");
+
+  // check if there are tilled plots
+  if (farm->tilledPlots < 1) {
+    printf("\nThere are no tilled plots. Till plots first to sow seeds.\n");
+  }
+
+  do {
+
+  } while (typeOfSeed != 0 || seedsToSow < 0);
+  // check type of seed to sow
+  printf("\nEnter type of seed to sow (enter 0 to cancel): ");
+  scanf(" %d", &typeOfSeed);
+  printf("\n1 for Banana Seeds");
+  printf("\n2 for Mango Seeds");
+  printf("\n3 for Corn Seeds");
+
+  if (typeOfSeed == 0) {
+    return;
+  }
+  if (typeOfSeed == 1) {
+    // banana seeds
+    return;
+  }
+  if (typeOfSeed == 2) {
+    // mango seeds
+    return;
+  }
+  if (typeOfSeed == 3) {
+    // corn seeds
+    return;
+  }
+
+  // check if same type of seed as seedsToSow is already sown, yes ? error
+  // check if seedsToSow is enough for the selected type
+  // check if enough plot is tilled for the seedsToSow
+  //
 }
 /*
  * Farm function
@@ -405,9 +462,9 @@ int main() {
   struct FarmStatus farm;
   farm.tilledPlots = 0;
   farm.untilledPlots = 30;
-  farm.banana = 0;
-  farm.mango = 0;
-  farm.corn = 0;
+  farm.bananaPlots = 0;
+  farm.mangoPlots = 0;
+  farm.cornPlots = 0;
 
   int playerChoice;
   bool isPlayerDead = false;
