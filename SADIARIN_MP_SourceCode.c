@@ -40,11 +40,25 @@ struct FarmStatus {
   int bananaPlots;
   int mangoPlots;
   int cornPlots;
-  int bananaWaterStatus;
-  int mangoWaterStatus;
-  int cornWaterStatus;
+  // for waterCrops
+  bool isBananaWatered;
+  bool isMangoWatered;
+  bool isCornWatered;
+  int bananaWaterAmount;
+  int mangoWaterAmount;
+  int cornWaterAmount;
 };
 
+/*
+ * This function
+ *
+ * Precondition:
+ *
+ * @param
+ *
+ * @return
+ *
+ * */
 void displayMainMenuOptions(struct PlayerStatus *player) {
 
   printf("----------------------------------------\n");
@@ -115,6 +129,16 @@ int checkIfDead(struct PlayerStatus *player, bool *isPlayerDead) {
 
 /* **************** FARM RELATED FUNCTIONS START ***************** */
 
+/*
+ * This function
+ *
+ * Precondition:
+ *
+ * @param
+ *
+ * @return
+ *
+ * */
 void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("\n\n----------------------------------------\n");
   printf("|    ***** Your Farm Status *****    |\n");
@@ -136,6 +160,20 @@ void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("----------------------------------------\n");
 }
 
+// int checkIfWateredForTheDay(struct FarmStatus *farm) {
+//   if (farm->isBananaWatered == true)
+// }
+
+/*
+ * This function
+ *
+ * Precondition:
+ *
+ * @param
+ *
+ * @return
+ *
+ * */
 void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
   int plotsToTillAmount;
 
@@ -171,6 +209,16 @@ void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("\nNOTICE: Farm has been updated\n");
 }
 
+/*
+ * This function
+ *
+ * Precondition:
+ *
+ * @param
+ *
+ * @return
+ *
+ * */
 void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
   int seedsToSowAmount, seedType;
 
@@ -201,6 +249,12 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
     printf("\n3 for Corn Seeds");
     printf("\nEnter type of seed to sow (enter 0 to cancel): ");
     scanf(" %d", &seedType);
+
+    while (seedType > 3) {
+      printf("[ INVALID INPUT ] Enter 1-3 only.");
+      printf("\nEnter type of seed to sow (enter 0 to cancel): ");
+      scanf(" %d", &seedType);
+    }
 
     if (seedType == 0) {
       return;
@@ -300,6 +354,55 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("\nNOTICE: Farm has been updated\n");
 }
 
+/*
+ * This function
+ *
+ * Precondition:
+ *
+ * @param
+ *
+ * @return
+ *
+ * */
+void waterCrops(struct FarmStatus *farm) {
+  int cropsType;
+
+  // can only water same type of crops once a day
+  printf("\n ***** What type of crops to water? ***** \n");
+  printf("\n1 for Banana Crops");
+  printf("\n2 for Mango Crops");
+  printf("\n3 for Corn Crops");
+  printf("\nEnter type of crops to water (enter 0 to cancel): ");
+  scanf(" %d", &cropsType);
+
+  if (cropsType == 0) {
+    return;
+  }
+
+  // ready to harvest conditions:
+  if (farm->bananaWaterAmount == 4) {
+    printf("Your banana plots are ready to be harvested!\n");
+  }
+
+  if (farm->mangoWaterAmount == 8) {
+    printf("Your mango plots are ready to be harvested!\n");
+  }
+
+  if (farm->cornWaterAmount == 6) {
+    printf("Your corn plots are ready to be harvested!\n");
+  }
+}
+
+/*
+ * This function
+ *
+ * Precondition:
+ *
+ * @param
+ *
+ * @return
+ *
+ * */
 void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
 
   int playerChoice;
@@ -343,7 +446,8 @@ void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
 /* **************** FARM RELATED FUNCTIONS END ***************** */
 
 /*
- * This function
+ * This function increments the day and resets fields (variables) at the start
+ * of the new day
  *
  * Precondition:
  *
@@ -414,7 +518,6 @@ void goHome(struct PlayerStatus *player, bool *isPlayerDead) {
  * @return
  *
  * */
-
 int main() {
   struct PlayerStatus player;
   player.gold = 50;
