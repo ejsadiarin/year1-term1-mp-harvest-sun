@@ -47,6 +47,9 @@ struct FarmStatus {
   int bananaWaterAmount;
   int mangoWaterAmount;
   int cornWaterAmount;
+  bool canHarvestBanana;
+  bool canHarvestMango;
+  bool canHarvestCorn;
 };
 
 /*
@@ -441,6 +444,7 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
       // ready to harvest
       if (farm->bananaWaterAmount == 4) {
         printf("\nYour banana crops are now ready to be harvested!\n");
+        farm->canHarvestBanana = true;
 
         // put max limit for the water amount
         if (farm->bananaWaterAmount > 4) {
@@ -478,6 +482,7 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
       // ready to harvest
       if (farm->mangoWaterAmount == 8) {
         printf("Your mango crops are now ready to be harvested!\n");
+        farm->canHarvestMango = true;
 
         // put max limit for the water amount
         if (farm->mangoWaterAmount > 8) {
@@ -515,6 +520,7 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
       // ready to harvest
       if (farm->cornWaterAmount == 6) {
         printf("Your corn crops are now ready to be harvested!\n");
+        farm->canHarvestCorn = true;
 
         // put max limit for the water amount
         if (farm->cornWaterAmount > 6) {
@@ -525,6 +531,76 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
       return;
     }
   } while (cropsType != 0);
+}
+
+void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
+  int cropsType;
+
+  // TODO: do while loop here to validate input
+  printf("\n ***** What crop to harvest? ***** \n");
+  printf("\n1 for Banana Crops");
+  printf("\n2 for Mango Crops");
+  printf("\n3 for Corn Crops");
+  printf("\nEnter type of crops to water (enter 0 to cancel): ");
+  scanf(" %d", &cropsType);
+
+  if (cropsType == 0) {
+    return;
+  }
+
+  // update banana
+  if (cropsType == 1) {
+    if (farm->canHarvestBanana) {
+      printf("Bountiful HARVEST!\n");
+      printf("You harvested %d crops of banana\n", farm->bananaPlots);
+      player->bananaCrops++;
+      // update untilledPlots and tilledPlots to amount of plots to harvest
+      farm->untilledPlots += farm->bananaPlots;
+      farm->tilledPlots -= farm->bananaPlots;
+      // update energy
+      player->energy -= farm->bananaPlots;
+      // update bananaPlots
+      farm->bananaPlots = 0;
+    }
+
+    return;
+  }
+
+  // update mango
+  if (cropsType == 2) {
+    if (farm->canHarvestMango) {
+      printf("Bountiful HARVEST!\n");
+      printf("You harvested %d crops of mango\n", farm->mangoPlots);
+      player->mangoCrops++;
+      // update untilledPlots and tilledPlots to amount of plots to harvest
+      farm->untilledPlots += farm->mangoPlots;
+      farm->tilledPlots -= farm->mangoPlots;
+      // update energy
+      player->energy -= farm->mangoPlots;
+      // update mangoPlots
+      farm->mangoPlots = 0;
+    }
+
+    return;
+  }
+
+  // update banana
+  if (cropsType == 3) {
+    if (farm->canHarvestCorn) {
+      printf("Bountiful HARVEST!\n");
+      printf("You harvested %d crops of corn\n", farm->cornPlots);
+      player->cornCrops++;
+      // update untilledPlots and tilledPlots to amount of plots to harvest
+      farm->untilledPlots += farm->cornPlots;
+      farm->tilledPlots -= farm->cornPlots;
+      // update energy
+      player->energy -= farm->cornPlots;
+      // update bananaPlots
+      farm->cornPlots = 0;
+    }
+
+    return;
+  }
 }
 
 /*
@@ -681,6 +757,9 @@ int main() {
   farm.bananaWaterAmount = 0;
   farm.mangoWaterAmount = 0;
   farm.cornWaterAmount = 0;
+  farm.canHarvestBanana = false;
+  farm.canHarvestMango = false;
+  farm.canHarvestCorn = false;
 
   int playerChoice;
   bool isPlayerDead = false;
