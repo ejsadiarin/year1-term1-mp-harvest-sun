@@ -364,33 +364,167 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
  * @return
  *
  * */
-void waterCrops(struct FarmStatus *farm) {
-  int cropsType;
+void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
+  int cropsToWaterAmount, cropsType;
 
-  // can only water same type of crops once a day
-  printf("\n ***** What type of crops to water? ***** \n");
-  printf("\n1 for Banana Crops");
-  printf("\n2 for Mango Crops");
-  printf("\n3 for Corn Crops");
-  printf("\nEnter type of crops to water (enter 0 to cancel): ");
-  scanf(" %d", &cropsType);
+  char *bananaWateredStatus = farm->isBananaWatered ? "YES" : "not yet";
+  char *mangoWateredStatus = farm->isMangoWatered ? "YES" : "not yet";
+  char *cornWateredStatus = farm->isCornWatered ? "YES" : "not yet";
 
-  if (cropsType == 0) {
-    return;
-  }
+  bool allWatered = farm->isBananaWatered == true &&
+                    farm->isMangoWatered == true && farm->isCornWatered == true;
 
-  // ready to harvest conditions:
-  if (farm->bananaWaterAmount == 4) {
-    printf("Your banana plots are ready to be harvested!\n");
-  }
+  printf("----------------------------------------\n");
+  printf("**** Farm Status: ****\n");
+  printf("Tilled plots: %d/30\n", farm->tilledPlots);
+  printf("Banana plots planted: %d | Watered status: %s\n", farm->bananaPlots,
+         bananaWateredStatus);
+  printf("Mango plots planted: %d | Watered status: %s\n", farm->mangoPlots,
+         mangoWateredStatus);
+  printf("Corn plots planted: %d | Watered status: %s\n", farm->cornPlots,
+         cornWateredStatus);
+  printf("----------------------------------------\n");
 
-  if (farm->mangoWaterAmount == 8) {
-    printf("Your mango plots are ready to be harvested!\n");
-  }
+  do {
+    // if (allWatered) {
+    //   printf("All types of crops are watered. See you tomorrow\n");
+    //   return;
+    // }
 
-  if (farm->cornWaterAmount == 6) {
-    printf("Your corn plots are ready to be harvested!\n");
-  }
+    printf("\n ***** What type of crops to water? ***** \n");
+    printf("\n1 for Banana Crops");
+    printf("\n2 for Mango Crops");
+    printf("\n3 for Corn Crops");
+    printf("\nEnter type of crops to water (enter 0 to cancel): ");
+    scanf(" %d", &cropsType);
+
+    while (cropsType > 3) {
+      printf("[ INVALID INPUT ] Enter 1-3 only.");
+      printf("\nEnter type of crops to water (enter 0 to cancel): ");
+      scanf(" %d", &cropsType);
+    }
+
+    if (cropsType == 0) {
+      return;
+    }
+
+    printf("\nEnter amount of crops to water (enter 0 to cancel): ");
+    scanf(" %d", &cropsToWaterAmount);
+
+    // banana crops
+    if (cropsType == 1) {
+      // CANCEL CONDITION: check if selected cropsType is watered
+      if (farm->isBananaWatered == true) {
+        printf("\n\nBanana crops are already watered for the day.\n");
+        printf("Go to the next day to water the same type of crop\n");
+        return;
+      }
+
+      // CANCEL CONDITION: check if energy is enough
+      if (player->energy < cropsToWaterAmount) {
+        printf("Not enough energy to water %d amount of crops\n",
+               cropsToWaterAmount);
+        return;
+      }
+
+      // CANCEL CONDITION: check if current bananaPlots are enough
+      if (farm->bananaPlots < cropsToWaterAmount) {
+        printf("Not enough banana plots.\n");
+        return;
+      }
+
+      // update water crops and flag
+      farm->bananaWaterAmount++;
+      farm->isBananaWatered = true;
+      printf("Successfully watered banana crops!\n");
+
+      // ready to harvest
+      if (farm->bananaWaterAmount == 4) {
+        printf("\nYour banana crops are now ready to be harvested!\n");
+
+        // put max limit for the water amount
+        if (farm->bananaWaterAmount > 4) {
+          farm->bananaWaterAmount = 4;
+        }
+      }
+
+      return;
+    }
+
+    // mango crops
+    if (cropsType == 2) {
+      // CANCEL CONDITION: check if selected cropsType is watered
+      if (farm->isMangoWatered == true) {
+        printf("\n\nMango crops are already watered for the day.\n");
+        printf("Go to the next day to water the same type of crop\n");
+      }
+
+      // CANCEL CONDITION: check if energy is enough
+      if (player->energy < cropsToWaterAmount) {
+        printf("Not enough energy to water %d amount of crops\n",
+               cropsToWaterAmount);
+      }
+
+      // CANCEL CONDITION: check if current mangoPlots are enough
+      if (farm->mangoPlots < cropsToWaterAmount) {
+        printf("Not enough mango plots.\n");
+      }
+
+      // update water crops and flag
+      farm->mangoWaterAmount++;
+      farm->isMangoWatered = true;
+      printf("Successfully watered mango crops!\n");
+
+      // ready to harvest
+      if (farm->mangoWaterAmount == 8) {
+        printf("Your mango crops are now ready to be harvested!\n");
+
+        // put max limit for the water amount
+        if (farm->mangoWaterAmount > 8) {
+          farm->mangoWaterAmount = 8;
+        }
+      }
+
+      return;
+    }
+
+    // corn crops
+    if (cropsType == 3) {
+      // CANCEL CONDITION: check if selected cropsType is watered
+      if (farm->isCornWatered == true) {
+        printf("\n\nCorn crops are already watered for the day.\n");
+        printf("Go to the next day to water the same type of crop\n");
+      }
+
+      // CANCEL CONDITION: check if energy is enough
+      if (player->energy < cropsToWaterAmount) {
+        printf("Not enough energy to water %d amount of crops\n",
+               cropsToWaterAmount);
+      }
+
+      // CANCEL CONDITION: check if current mangoPlots are enough
+      if (farm->cornPlots < cropsToWaterAmount) {
+        printf("Not enough corn plots.\n");
+      }
+
+      // update water crops and flag
+      farm->cornWaterAmount++;
+      farm->isCornWatered = true;
+      printf("Successfully watered corn crops!\n");
+
+      // ready to harvest
+      if (farm->cornWaterAmount == 6) {
+        printf("Your corn crops are now ready to be harvested!\n");
+
+        // put max limit for the water amount
+        if (farm->cornWaterAmount > 6) {
+          farm->cornWaterAmount = 6;
+        }
+      }
+
+      return;
+    }
+  } while (cropsType != 0);
 }
 
 /*
@@ -421,11 +555,10 @@ void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
     case 2:
       printf("\nYou chose to sow seeds\n");
       sowSeeds(player, farm);
-      // function here
       break;
     case 3:
       printf("\nYou chose to water crops!\n");
-      // function here
+      waterCrops(player, farm);
       break;
     case 4:
       printf("\nYou chose to harvest crops!\n");
@@ -438,7 +571,7 @@ void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
       break;
     default:
       // checks if int input is valid
-      printf("\nInvalid input! Enter numbers 1-5 only.\n");
+      printf("\n[ INVALID INPUT ] Enter numbers 1-5 only.\n");
     }
   } while (playerChoice != 5);
 }
@@ -456,7 +589,8 @@ void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
  * @return
  *
  * */
-void goHome(struct PlayerStatus *player, bool *isPlayerDead) {
+void goHome(struct PlayerStatus *player, struct FarmStatus *farm,
+            bool *isPlayerDead) {
 
   checkIfDead(player, isPlayerDead);
 
@@ -476,8 +610,12 @@ void goHome(struct PlayerStatus *player, bool *isPlayerDead) {
     // tax gold for breakfast & update hunger status
     printf("-10 gold for eating breakfast\n");
     printf("Eating breakfast... nom nom nom\n\n");
-
     player->gold -= 10;
+
+    // reset water status for each crop type
+    farm->isBananaWatered = false;
+    farm->isMangoWatered = false;
+    farm->isCornWatered = false;
   }
 }
 
@@ -537,6 +675,12 @@ int main() {
   farm.bananaPlots = 0;
   farm.mangoPlots = 0;
   farm.cornPlots = 0;
+  farm.isBananaWatered = false;
+  farm.isMangoWatered = false;
+  farm.isCornWatered = false;
+  farm.bananaWaterAmount = 0;
+  farm.mangoWaterAmount = 0;
+  farm.cornWaterAmount = 0;
 
   int playerChoice;
   bool isPlayerDead = false;
@@ -557,7 +701,7 @@ int main() {
     switch (playerChoice) {
     case 1:
       printf("\nYou chose to Go Home. Have a wonderful rest!\n");
-      goHome(&player, &isPlayerDead);
+      goHome(&player, &farm, &isPlayerDead);
       break;
     case 2:
       printf("\nYou chose to Go to the Farm!\n");
