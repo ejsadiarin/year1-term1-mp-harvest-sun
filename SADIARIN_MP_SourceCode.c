@@ -193,40 +193,42 @@ void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
 }
 
 void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
-  int plotsToTill;
+  int plotsToTillAmount;
 
   do {
     // error handle, prompts player again until correct conditions are met
     printf("Enter amount of plots to till (enter 0 to cancel): ");
-    scanf(" %d", &plotsToTill);
+    scanf(" %d", &plotsToTillAmount);
 
-    if (plotsToTill == 0) {
+    if (plotsToTillAmount == 0) {
       return;
     }
 
     // check if player have enough energy
-    if (player->energy < plotsToTill) {
+    if (player->energy < plotsToTillAmount) {
       printf("\nEnergy is not sufficient.\n");
     }
     // check if farm have enough untilledPlots to be tilledPlots
-    if (farm->untilledPlots < plotsToTill) {
+    if (farm->untilledPlots < plotsToTillAmount) {
       printf("Not enough untilled plots to till\n");
     }
-  } while (player->energy < plotsToTill || farm->untilledPlots < plotsToTill);
+  } while (player->energy < plotsToTillAmount ||
+           farm->untilledPlots < plotsToTillAmount);
 
-  printf("\nNOTICE: Farm has been updated\n");
   // if player has enough energy then energy - plotsToTill
-  player->energy -= plotsToTill;
+  player->energy -= plotsToTillAmount;
 
   // update tilledPlots based on plotsToTill input from player
-  farm->tilledPlots += plotsToTill;
+  farm->tilledPlots += plotsToTillAmount;
 
   // update untilledPlots (subtract to how many are now tilledPlots)
-  farm->untilledPlots -= plotsToTill;
+  farm->untilledPlots -= plotsToTillAmount;
+
+  printf("\nNOTICE: Farm has been updated\n");
 }
 
 void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
-  int seedsToSow, typeOfSeed;
+  int seedsToSowAmount, seedType;
 
   printf("----------------------------------------\n");
   printf("**** Inventory: ****\n");
@@ -236,48 +238,124 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("----------------------------------------\n");
   printf("**** Farm Status: ****\n");
   printf("Tilled plots: %d/30\n", farm->tilledPlots);
-  // TODO: this
-  printf("Banana plots planted: %d/30\n", farm->tilledPlots);
-  printf("Tilled plots: %d/30\n", farm->tilledPlots);
-  printf("Tilled plots: %d/30\n", farm->tilledPlots);
+  printf("Banana plots planted: %d\n", farm->bananaPlots);
+  printf("Mango plots planted: %d\n", farm->mangoPlots);
+  printf("Corn plots planted: %d\n", farm->cornPlots);
   printf("----------------------------------------\n");
 
   // check if there are tilled plots
   if (farm->tilledPlots < 1) {
     printf("\nThere are no tilled plots. Till plots first to sow seeds.\n");
+    return;
   }
 
   do {
+    // check type of seed to sow
+    printf("\n ***** What type of seed? ***** \n");
+    printf("\n1 for Banana Seeds");
+    printf("\n2 for Mango Seeds");
+    printf("\n3 for Corn Seeds");
+    printf("\nEnter type of seed to sow (enter 0 to cancel): ");
+    scanf(" %d", &seedType);
 
-  } while (typeOfSeed != 0 || seedsToSow < 0);
-  // check type of seed to sow
-  printf("\nEnter type of seed to sow (enter 0 to cancel): ");
-  scanf(" %d", &typeOfSeed);
-  printf("\n1 for Banana Seeds");
-  printf("\n2 for Mango Seeds");
-  printf("\n3 for Corn Seeds");
+    if (seedType == 0) {
+      return;
+    }
 
-  if (typeOfSeed == 0) {
-    return;
-  }
-  if (typeOfSeed == 1) {
+    printf("\nEnter amount of seeds to sow: ");
+    scanf(" %d", &seedsToSowAmount);
+
+    // CANCEL CONDITION: check if tilledPlots are enough
+    if (seedsToSowAmount > farm->tilledPlots) {
+      printf("Not enough tilled plots to sow %d seeds", seedsToSowAmount);
+      return;
+    }
+
     // banana seeds
-    return;
-  }
-  if (typeOfSeed == 2) {
-    // mango seeds
-    return;
-  }
-  if (typeOfSeed == 3) {
-    // corn seeds
-    return;
-  }
+    if (seedType == 1) {
+      // CANCEL CONDITION: check if type of seed are already sown
+      if (farm->bananaPlots > 0) {
+        printf("Banana seeds are already sown. Harvest them first.\n");
+        return;
+      }
+      // CANCEL CONDITION: check if owned banana seeds are enough
+      if (seedsToSowAmount > player->bananaSeeds) {
+        printf("Not enough bag of banana seeds.\n");
+        printf("Buy in shop first.\n");
+        return;
+      }
+      // CANCEL CONDITION: check if energy is enough
+      if (seedsToSowAmount > player->energy) {
+        printf("Not enough energy to sow %d banana seeds\n", seedsToSowAmount);
+        return;
+      }
 
-  // check if same type of seed as seedsToSow is already sown, yes ? error
-  // check if seedsToSow is enough for the selected type
-  // check if enough plot is tilled for the seedsToSow
-  //
+      // update bananaPlots
+      farm->bananaPlots += seedsToSowAmount;
+      // update bananaSeeds
+      player->bananaSeeds -= seedsToSowAmount;
+      // update energy
+      player->energy -= seedsToSowAmount;
+    }
+
+    // mango seeds
+    if (seedType == 2) {
+      // CANCEL CONDITION: check if type of seed are already sown
+      if (farm->mangoPlots > 0) {
+        printf("Mango seeds are already sown. Harvest them first.\n");
+        return;
+      }
+      // CANCEL CONDITION: check if owned banana seeds are enough
+      if (seedsToSowAmount > player->mangoSeeds) {
+        printf("Not enough bag of mango seeds.\n");
+        printf("Buy in shop first.\n");
+        return;
+      }
+      // CANCEL CONDITION: check if energy is enough
+      if (seedsToSowAmount > player->energy) {
+        printf("Not enough energy to sow %d mango seeds\n", seedsToSowAmount);
+        return;
+      }
+
+      // update mangoPlots
+      farm->mangoPlots += seedsToSowAmount;
+      // update mangoSeeds
+      player->mangoSeeds -= seedsToSowAmount;
+      // update energy
+      player->energy -= seedsToSowAmount;
+    }
+
+    // corn seeds
+    if (seedType == 3) {
+      // CANCEL CONDITION: check if type of seed are already sown
+      if (farm->cornPlots > 0) {
+        printf("Corn seeds are already sown. Harvest them first.\n");
+        return;
+      }
+      // CANCEL CONDITION: check if owned banana seeds are enough
+      if (seedsToSowAmount > player->cornSeeds) {
+        printf("Not enough bag of corn seeds.\n");
+        printf("Buy in shop first.\n");
+        return;
+      }
+      // CANCEL CONDITION: check if energy is enough
+      if (seedsToSowAmount > player->energy) {
+        printf("Not enough energy to sow %d corn seeds\n", seedsToSowAmount);
+        return;
+      }
+
+      // update cornPlots
+      farm->cornPlots += seedsToSowAmount;
+      // update cornSeeds
+      player->cornSeeds -= seedsToSowAmount;
+      // update energy
+      player->energy -= seedsToSowAmount;
+    }
+  } while (seedType != 0 || seedsToSowAmount < 0);
+
+  printf("\nNOTICE: Farm has been updated\n");
 }
+
 /*
  * Farm function
  * - every action in the farm consumes energy
@@ -355,6 +433,7 @@ void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
       break;
     case 2:
       printf("\nYou chose to sow seeds\n");
+      sowSeeds(player, farm);
       // function here
       break;
     case 3:
@@ -458,6 +537,9 @@ int main() {
   player.energy = 30;
   player.day = 1;
   player.starvedDay = 0;
+  player.bananaSeeds = 0;
+  player.mangoSeeds = 0;
+  player.cornSeeds = 0;
 
   struct FarmStatus farm;
   farm.tilledPlots = 0;
