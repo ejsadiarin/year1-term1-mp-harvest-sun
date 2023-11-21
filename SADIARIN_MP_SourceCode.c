@@ -368,7 +368,7 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
  *
  * */
 void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
-  int cropsToWaterAmount, cropsType;
+  int cropsToWaterAmount, cropType;
 
   char *bananaWateredStatus = farm->isBananaWatered ? "YES" : "not yet";
   char *mangoWateredStatus = farm->isMangoWatered ? "YES" : "not yet";
@@ -399,15 +399,15 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
     printf("\n2 for Mango Crops");
     printf("\n3 for Corn Crops");
     printf("\nEnter type of crops to water (enter 0 to cancel): ");
-    scanf(" %d", &cropsType);
+    scanf(" %d", &cropType);
 
-    while (cropsType > 3) {
+    while (cropType > 3) {
       printf("[ INVALID INPUT ] Enter 1-3 only.");
       printf("\nEnter type of crops to water (enter 0 to cancel): ");
-      scanf(" %d", &cropsType);
+      scanf(" %d", &cropType);
     }
 
-    if (cropsType == 0) {
+    if (cropType == 0) {
       return;
     }
 
@@ -415,8 +415,8 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
     scanf(" %d", &cropsToWaterAmount);
 
     // banana crops
-    if (cropsType == 1) {
-      // CANCEL CONDITION: check if selected cropsType is watered
+    if (cropType == 1) {
+      // CANCEL CONDITION: check if selected cropType is watered
       if (farm->isBananaWatered == true) {
         printf("\n\nBanana crops are already watered for the day.\n");
         printf("Go to the next day to water the same type of crop\n");
@@ -456,8 +456,8 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
     }
 
     // mango crops
-    if (cropsType == 2) {
-      // CANCEL CONDITION: check if selected cropsType is watered
+    if (cropType == 2) {
+      // CANCEL CONDITION: check if selected cropType is watered
       if (farm->isMangoWatered == true) {
         printf("\n\nMango crops are already watered for the day.\n");
         printf("Go to the next day to water the same type of crop\n");
@@ -494,8 +494,8 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
     }
 
     // corn crops
-    if (cropsType == 3) {
-      // CANCEL CONDITION: check if selected cropsType is watered
+    if (cropType == 3) {
+      // CANCEL CONDITION: check if selected cropType is watered
       if (farm->isCornWatered == true) {
         printf("\n\nCorn crops are already watered for the day.\n");
         printf("Go to the next day to water the same type of crop\n");
@@ -530,11 +530,11 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
 
       return;
     }
-  } while (cropsType != 0);
+  } while (cropType != 0);
 }
 
 void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
-  int cropsType;
+  int cropType;
 
   // TODO: do while loop here to validate input
   printf("\n ***** What crop to harvest? ***** \n");
@@ -542,14 +542,14 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("\n2 for Mango Crops");
   printf("\n3 for Corn Crops");
   printf("\nEnter type of crops to water (enter 0 to cancel): ");
-  scanf(" %d", &cropsType);
+  scanf(" %d", &cropType);
 
-  if (cropsType == 0) {
+  if (cropType == 0) {
     return;
   }
 
   // update banana
-  if (cropsType == 1) {
+  if (cropType == 1) {
     if (farm->canHarvestBanana) {
       printf("Bountiful HARVEST!\n");
       printf("You harvested %d crops of banana\n", farm->bananaPlots);
@@ -567,7 +567,7 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
   }
 
   // update mango
-  if (cropsType == 2) {
+  if (cropType == 2) {
     if (farm->canHarvestMango) {
       printf("Bountiful HARVEST!\n");
       printf("You harvested %d crops of mango\n", farm->mangoPlots);
@@ -585,7 +585,7 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
   }
 
   // update banana
-  if (cropsType == 3) {
+  if (cropType == 3) {
     if (farm->canHarvestCorn) {
       printf("Bountiful HARVEST!\n");
       printf("You harvested %d crops of corn\n", farm->cornPlots);
