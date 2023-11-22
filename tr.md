@@ -115,3 +115,30 @@
  * (5) Go back to main menu
  *
  * */
+
+/* Shop function
+ * - display "Welcome to Shop"
+ *   (1) Buy Seeds
+ *   - ask type of seed and how many they want to buy
+ *   Banana - 3 gold per bag of banana seeds
+ *   Corn - 5 ...
+ *   Mango - 7 ...
+ *   - For example:
+ *    - player chose Mango and 15 bags = 7 * 15 = 105 gold needed to buy 15 bags
+ *      of mango seeds
+ *
+ *   (2) Sell Crops
+ *   - player can sell harvested crops
+ *   - ask type of crops and how many to sell
+ *   Banana - 4 gold per bag of banana seeds
+ *   Corn - 7 ...
+ *   Mango - 10 ...
+ *   - check if player has enough quantity of crops in their "inventory" to sell
+ *   - For example:
+ *    - player chose Corn and 30 kg of corn to sell,
+ *    - check first if player has 30 kg of corn
+ *    - if yes, then:
+ *      - 10 gold * 30 kilos or kg = 300 gold acquired
+ *
+ *   (3) Go back to main menu
+ * */

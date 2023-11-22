@@ -706,12 +706,10 @@ void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
       break;
     case 4:
       printf("\nYou chose to harvest crops!\n");
-      // function here
+      harvestCrops(player, farm);
       break;
     case 5:
       printf("\nGoing back to main menu...\n");
-      // no need since this goToFarm function is inside another switch case that
-      // have a do while loop displayMainMenuOptions(player);
       break;
     default:
       // checks if int input is valid
@@ -763,32 +761,223 @@ void goHome(struct PlayerStatus *player, struct FarmStatus *farm,
   }
 }
 
-/* Shop function
- * - display "Welcome to Shop"
- *   (1) Buy Seeds
- *   - ask type of seed and how many they want to buy
- *   Banana - 3 gold per bag of banana seeds
- *   Corn - 5 ...
- *   Mango - 7 ...
- *   - For example:
- *    - player chose Mango and 15 bags = 7 * 15 = 105 gold needed to buy 15 bags
- *      of mango seeds
- *
- *   (2) Sell Crops
- *   - player can sell harvested crops
- *   - ask type of crops and how many to sell
- *   Banana - 4 gold per bag of banana seeds
- *   Corn - 7 ...
- *   Mango - 10 ...
- *   - check if player has enough quantity of crops in their "inventory" to sell
- *   - For example:
- *    - player chose Corn and 30 kg of corn to sell,
- *    - check first if player has 30 kg of corn
- *    - if yes, then:
- *      - 10 gold * 30 kilos or kg = 300 gold acquired
- *
- *   (3) Go back to main menu
- * */
+void buySeeds(struct PlayerStatus *player) {
+  int seedAmount, seedType;
+  int bananaBuyPrice, mangoBuyPrice, cornBuyPrice, finalPrice;
+
+  bananaBuyPrice = 3;
+  mangoBuyPrice = 7;
+  cornBuyPrice = 5;
+
+  printf("----------------------------------------\n");
+  printf("**** Inventory: ****\n");
+  printf("Gold: %dG\n", player->gold);
+  printf("Banana Seeds (Bag): %d\n", player->bananaSeeds);
+  printf("Mango Seeds (Bag): %d\n", player->mangoSeeds);
+  printf("Corn Seeds (Bag): %d\n", player->cornSeeds);
+  printf("----------------------------------------\n");
+
+  do {
+    printf("\n What type of seed do you want to buy?\n");
+    printf("Enter 1 ");
+    printf("\n1 for Banana Seeds");
+    printf("\n2 for Mango Seeds");
+    printf("\n3 for Corn Seeds");
+    printf("\nEnter number of the type of seed to buy (enter 0 to cancel): ");
+    scanf(" %d", &seedType);
+
+    while (seedType > 3 || seedType < 0) {
+      printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
+      printf("\nEnter type of seed to buy (enter 0 to cancel): ");
+      scanf(" %d", &seedType);
+    }
+
+    if (seedType == 0) {
+      printf("\nGoing back to main menu...\n");
+      return;
+    }
+
+    printf("\nEnter amount of bag of seeds to buy: ");
+    scanf(" %d", &seedAmount);
+
+    switch (seedType) {
+    case 1:
+      // banana - 3 gold
+
+      finalPrice = bananaBuyPrice * seedAmount;
+
+      // CANCEL CONDITION: if not have enough gold
+      if (player->gold < finalPrice) {
+        printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
+        return;
+      }
+
+      printf("\nYou successfully bought %d bag of banana seeds!\n", seedAmount);
+      player->gold -= finalPrice;
+      printf("-%d gold\n", finalPrice);
+      break;
+    case 2:
+      // mango - 7 gold
+
+      finalPrice = mangoBuyPrice * seedAmount;
+
+      // CANCEL CONDITION: if not have enough gold
+      if (player->gold < finalPrice) {
+        printf("\nNot enough gold to buy %d bag of seeds", seedAmount);
+        return;
+      }
+
+      printf("\nYou successfully bought %d bag of mango seeds!\n", seedAmount);
+      player->gold -= finalPrice;
+      break;
+    case 3:
+      // corn - 5 gold
+
+      finalPrice = cornBuyPrice * seedAmount;
+
+      // CANCEL CONDITION: if not have enough gold
+      if (player->gold < finalPrice) {
+        printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
+        return;
+      }
+
+      printf("\nYou successfully bought %d bag of corn seeds!\n", seedAmount);
+      player->gold -= finalPrice;
+      break;
+    default:
+      // checks if int input is valid
+      printf("\n[ INVALID INPUT ] Enter numbers 1-3 only.\n");
+    }
+
+  } while (seedType != 0 || seedType < 0);
+}
+
+void sellCrops(struct PlayerStatus *player) {
+  int cropsAmount, cropType;
+  int bananaSellPrice, mangoSellPrice, cornSellPrice, finalSellPrice;
+
+  bananaSellPrice = 4;
+  mangoSellPrice = 10;
+  cornSellPrice = 7;
+
+  printf("----------------------------------------\n");
+  printf("**** Inventory: ****\n");
+  printf("Gold: %dG\n", player->gold);
+  printf("Banana Crops (kg): %d\n", player->bananaCrops);
+  printf("Mango Crops (kg): %d\n", player->mangoCrops);
+  printf("Corn Crops (kg): %d\n", player->cornCrops);
+  printf("----------------------------------------\n");
+
+  do {
+    printf("\n What type of seed do you want to sell?\n");
+    printf("Enter 1 ");
+    printf("\n1 for Banana Crops");
+    printf("\n2 for Mango Crops");
+    printf("\n3 for Corn Crops");
+    printf("\nEnter number of the type of crop to sell (enter 0 to cancel): ");
+    scanf(" %d", &cropType);
+
+    while (cropType > 3 || cropType < 0) {
+      printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
+      printf("\nEnter type of seed to buy (enter 0 to cancel): ");
+      scanf(" %d", &cropType);
+    }
+
+    if (cropType == 0) {
+      printf("\nGoing back to main menu...\n");
+      return;
+    }
+
+    printf("\nEnter amount of kilograms (kg) of crops to sell: ");
+    scanf(" %d", &cropsAmount);
+
+    switch (cropType) {
+    case 1:
+      // banana - 4 gold
+
+      // CANCEL CONDITION: if don't have enough selected crops
+      if (player->bananaCrops < cropsAmount) {
+        printf("Not enough banana crops to sell at that amount.\n");
+        return;
+      }
+
+      player->bananaCrops -= cropsAmount;
+      printf("\nYou successfully sold %d kg of banana crops!\n", cropsAmount);
+
+      finalSellPrice = bananaSellPrice * cropsAmount;
+
+      player->gold += finalSellPrice;
+      printf("+%d gold acquired.\n", finalSellPrice);
+      break;
+    case 2:
+      // mango - 10 gold
+
+      // CANCEL CONDITION: if don't have enough selected crops
+      if (player->mangoCrops < cropsAmount) {
+        printf("Not enough mango crops to sell at that amount.\n");
+        return;
+      }
+
+      player->mangoCrops -= cropsAmount;
+      printf("\nYou successfully sold %d kg of mango crops!\n", cropsAmount);
+
+      finalSellPrice = mangoSellPrice * cropsAmount;
+
+      player->gold += finalSellPrice;
+      printf("+%d gold acquired.\n", finalSellPrice);
+      break;
+    case 3:
+      // corn - 7 gold
+
+      // CANCEL CONDITION: if don't have enough selected crops
+      if (player->cornCrops < cropsAmount) {
+        printf("Not enough corn crops to sell at that amount.\n");
+        return;
+      }
+
+      player->cornCrops -= cropsAmount;
+      printf("\nYou successfully sold %d kg of corn crops!\n", cropsAmount);
+
+      finalSellPrice = cornSellPrice * cropsAmount;
+
+      player->gold += finalSellPrice;
+      printf("+%d gold acquired.\n", finalSellPrice);
+      break;
+    default:
+      // checks if int input is valid
+      printf("\n[ INVALID INPUT ] Enter numbers 1-3 only.\n");
+    }
+
+  } while (cropType != 0 || cropType < 0);
+}
+
+void goToShop(struct PlayerStatus *player) {
+  int playerChoice;
+  do {
+    printf("\n\n******* Welcome to the Shop! *******\n");
+    printf("-------------------------------\n");
+    printf("Enter 1 to Buy Seeds\n");
+    printf("Enter 2 to Sell Crops\n");
+    printf("Enter 3 to Go back to Main Menu\n");
+    printf("-------------------------------\n");
+    switch (playerChoice) {
+    case 1:
+      printf("\n\nBuying seeds...\n");
+      buySeeds(player);
+      break;
+    case 2:
+      printf("\n\nSelling crops...\n");
+      sellCrops(player);
+      break;
+    case 3:
+      printf("\nGoing back to main menu...\n");
+      break;
+    default:
+      // checks if int input is valid
+      printf("\n[ INVALID INPUT ] Enter numbers 1-3 only.\n");
+    }
+  } while (playerChoice != 3);
+}
 
 /*
  * This function displays the main menu options
