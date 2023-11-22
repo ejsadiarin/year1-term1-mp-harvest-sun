@@ -253,8 +253,8 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
     printf("\nEnter type of seed to sow (enter 0 to cancel): ");
     scanf(" %d", &seedType);
 
-    while (seedType > 3) {
-      printf("[ INVALID INPUT ] Enter 1-3 only.");
+    while (seedType > 3 || seedType < 0) {
+      printf("[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
       printf("\nEnter type of seed to sow (enter 0 to cancel): ");
       scanf(" %d", &seedType);
     }
@@ -297,6 +297,8 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
       player->bananaSeeds -= seedsToSowAmount;
       // update energy
       player->energy -= seedsToSowAmount;
+      printf("\nNOTICE: Farm has been updated\n");
+      return;
     }
 
     // mango seeds
@@ -324,6 +326,8 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
       player->mangoSeeds -= seedsToSowAmount;
       // update energy
       player->energy -= seedsToSowAmount;
+      printf("\nNOTICE: Farm has been updated\n");
+      return;
     }
 
     // corn seeds
@@ -351,10 +355,10 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
       player->cornSeeds -= seedsToSowAmount;
       // update energy
       player->energy -= seedsToSowAmount;
+      printf("\nNOTICE: Farm has been updated\n");
+      return;
     }
   } while (seedType != 0 || seedsToSowAmount < 0);
-
-  printf("\nNOTICE: Farm has been updated\n");
 }
 
 /*
@@ -401,8 +405,8 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
     printf("\nEnter type of crops to water (enter 0 to cancel): ");
     scanf(" %d", &cropType);
 
-    while (cropType > 3) {
-      printf("[ INVALID INPUT ] Enter 1-3 only.");
+    while (cropType > 3 || cropType < 0) {
+      printf("[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
       printf("\nEnter type of crops to water (enter 0 to cancel): ");
       scanf(" %d", &cropType);
     }
@@ -530,77 +534,132 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
 
       return;
     }
-  } while (cropType != 0);
+  } while (cropType != 0 || cropType < 0);
 }
 
 void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
   int cropType;
 
-  // TODO: do while loop here to validate input
-  printf("\n ***** What crop to harvest? ***** \n");
-  printf("\n1 for Banana Crops");
-  printf("\n2 for Mango Crops");
-  printf("\n3 for Corn Crops");
-  printf("\nEnter type of crops to water (enter 0 to cancel): ");
-  scanf(" %d", &cropType);
+  char *bananaHarvestStatus = farm->isBananaWatered ? "YES" : "not yet";
+  char *mangoHarvestStatus = farm->isMangoWatered ? "YES" : "not yet";
+  char *cornWateredStatus = farm->isCornWatered ? "YES" : "not yet";
 
-  if (cropType == 0) {
-    return;
-  }
+  printf("----------------------------------------\n");
+  printf("**** Harvest Status: ****\n");
+  printf("Banana crops:") printf("----------------------------------------\n");
 
-  // update banana
-  if (cropType == 1) {
-    if (farm->canHarvestBanana) {
-      printf("Bountiful HARVEST!\n");
-      printf("You harvested %d crops of banana\n", farm->bananaPlots);
-      player->bananaCrops++;
-      // update untilledPlots and tilledPlots to amount of plots to harvest
-      farm->untilledPlots += farm->bananaPlots;
-      farm->tilledPlots -= farm->bananaPlots;
-      // update energy
-      player->energy -= farm->bananaPlots;
-      // update bananaPlots
-      farm->bananaPlots = 0;
+  do {
+    printf("\n ***** What crop to harvest? ***** \n");
+    printf("\n1 for Banana Crops");
+    printf("\n2 for Mango Crops");
+    printf("\n3 for Corn Crops");
+    printf("\nEnter type of crops to water (enter 0 to cancel): ");
+    scanf(" %d", &cropType);
+
+    while (cropType > 3 || cropType < 0) {
+      printf("[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
+      printf("\nEnter type of crops to sow (enter 0 to cancel): ");
+      scanf(" %d", &cropType);
     }
 
-    return;
-  }
-
-  // update mango
-  if (cropType == 2) {
-    if (farm->canHarvestMango) {
-      printf("Bountiful HARVEST!\n");
-      printf("You harvested %d crops of mango\n", farm->mangoPlots);
-      player->mangoCrops++;
-      // update untilledPlots and tilledPlots to amount of plots to harvest
-      farm->untilledPlots += farm->mangoPlots;
-      farm->tilledPlots -= farm->mangoPlots;
-      // update energy
-      player->energy -= farm->mangoPlots;
-      // update mangoPlots
-      farm->mangoPlots = 0;
+    if (cropType == 0) {
+      return;
     }
 
-    return;
-  }
+    // update banana
+    if (cropType == 1) {
+      // CANCEL CONDITION: check if energy is enough
+      if (player->energy < farm->bananaPlots) {
+        printf("Not enough energy to harvest %d amount of crops\n",
+               farm->bananaPlots);
+      }
 
-  // update banana
-  if (cropType == 3) {
-    if (farm->canHarvestCorn) {
-      printf("Bountiful HARVEST!\n");
-      printf("You harvested %d crops of corn\n", farm->cornPlots);
-      player->cornCrops++;
-      // update untilledPlots and tilledPlots to amount of plots to harvest
-      farm->untilledPlots += farm->cornPlots;
-      farm->tilledPlots -= farm->cornPlots;
-      // update energy
-      player->energy -= farm->cornPlots;
-      // update bananaPlots
-      farm->cornPlots = 0;
+      if (farm->canHarvestBanana) {
+        printf("Bountiful HARVEST!\n");
+        printf("You harvested %d crops of banana\n", farm->bananaPlots);
+        player->bananaCrops++;
+        // update untilledPlots and tilledPlots to amount of plots to harvest
+        farm->untilledPlots += farm->bananaPlots;
+        farm->tilledPlots -= farm->bananaPlots;
+        // update energy
+        player->energy -= farm->bananaPlots;
+        // update bananaPlots
+        farm->bananaPlots = 0;
+        // reset harvest flag
+        farm->canHarvestBanana = false;
+        return;
+      }
+
+      // if cannot harvest
+      printf("Not enough water to harvest banana crops.\n");
+      printf("Your banana crop water status: %d/4\n", farm->bananaWaterAmount);
+
+      return;
     }
 
-    return;
-  }
+    // update mango
+    if (cropType == 2) {
+      // CANCEL CONDITION: check if energy is enough
+      if (player->energy < farm->mangoPlots) {
+        printf("Not enough energy to harvest %d amount of crops\n",
+               farm->mangoPlots);
+      }
+
+      if (farm->canHarvestMango) {
+        printf("Bountiful HARVEST!\n");
+        printf("You harvested %d crops of mango\n", farm->mangoPlots);
+        player->mangoCrops++;
+        // update untilledPlots and tilledPlots to amount of plots to harvest
+        farm->untilledPlots += farm->mangoPlots;
+        farm->tilledPlots -= farm->mangoPlots;
+        // update energy
+        player->energy -= farm->mangoPlots;
+        // update mangoPlots
+        farm->mangoPlots = 0;
+        // reset harvest flag
+        farm->canHarvestMango = false;
+        return;
+      }
+
+      // if cannot harvest
+      printf("Not enough water to harvest mango crops.\n");
+      printf("Your mango crop water status: %d/8\n", farm->mangoWaterAmount);
+
+      return;
+    }
+
+    // update corn
+    if (cropType == 3) {
+      // CANCEL CONDITION: check if energy is enough
+      if (player->energy < farm->cornPlots) {
+        printf("Not enough energy to harvest %d amount of crops\n",
+               farm->cornPlots);
+      }
+
+      if (farm->canHarvestCorn) {
+        printf("Bountiful HARVEST!\n");
+        printf("You harvested %d crops of corn\n", farm->cornPlots);
+        player->cornCrops++;
+        // update untilledPlots and tilledPlots to amount of plots to harvest
+        farm->untilledPlots += farm->cornPlots;
+        farm->tilledPlots -= farm->cornPlots;
+        // update energy
+        player->energy -= farm->cornPlots;
+        // update cornPlots
+        farm->cornPlots = 0;
+        // reset harvest flag
+        farm->canHarvestCorn = false;
+        return;
+      }
+
+      // if cannot harvest
+      printf("Not enough water to harvest corn crops.\n");
+      printf("Your corn crop water status: %d/6\n", farm->cornWaterAmount);
+
+      return;
+    }
+    // } while (cropType != 0);
+  } while (cropType != 0 || cropType < 0);
 }
 
 /*
