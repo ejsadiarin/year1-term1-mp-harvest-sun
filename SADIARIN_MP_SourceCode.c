@@ -254,7 +254,7 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
     scanf(" %d", &seedType);
 
     while (seedType > 3 || seedType < 0) {
-      printf("[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
+      printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
       printf("\nEnter type of seed to sow (enter 0 to cancel): ");
       scanf(" %d", &seedType);
     }
@@ -406,7 +406,7 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
     scanf(" %d", &cropType);
 
     while (cropType > 3 || cropType < 0) {
-      printf("[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
+      printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
       printf("\nEnter type of crops to water (enter 0 to cancel): ");
       scanf(" %d", &cropType);
     }
@@ -540,13 +540,22 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
 void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
   int cropType;
 
-  char *bananaHarvestStatus = farm->isBananaWatered ? "YES" : "not yet";
-  char *mangoHarvestStatus = farm->isMangoWatered ? "YES" : "not yet";
-  char *cornWateredStatus = farm->isCornWatered ? "YES" : "not yet";
+  char *bananaHarvestStatus =
+      farm->bananaWaterAmount == 4 ? "Ready to harvest" : "not yet";
+  char *mangoHarvestStatus =
+      farm->mangoWaterAmount == 8 ? "Ready to harvest" : "not yet";
+  char *cornHavestStatus =
+      farm->cornWaterAmount == 6 ? "Ready to harvest" : "not yet";
 
   printf("----------------------------------------\n");
   printf("**** Harvest Status: ****\n");
-  printf("Banana crops:") printf("----------------------------------------\n");
+  printf("Banana crops: %s | Water amount: %d/4\n", bananaHarvestStatus,
+         farm->bananaWaterAmount);
+  printf("Mango crops: %s | Water amount: %d/8\n", mangoHarvestStatus,
+         farm->mangoWaterAmount);
+  printf("Corn crops: %s | Water amount: %d/6\n", cornHavestStatus,
+         farm->cornWaterAmount);
+  printf("----------------------------------------\n");
 
   do {
     printf("\n ***** What crop to harvest? ***** \n");
@@ -557,7 +566,7 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
     scanf(" %d", &cropType);
 
     while (cropType > 3 || cropType < 0) {
-      printf("[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
+      printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
       printf("\nEnter type of crops to sow (enter 0 to cancel): ");
       scanf(" %d", &cropType);
     }
