@@ -960,6 +960,9 @@ void goToShop(struct PlayerStatus *player) {
     printf("Enter 2 to Sell Crops\n");
     printf("Enter 3 to Go back to Main Menu\n");
     printf("-------------------------------\n");
+    printf("\nEnter number of the action you want to do: ");
+    scanf(" %d", &playerChoice);
+
     switch (playerChoice) {
     case 1:
       printf("\n\nBuying seeds...\n");
