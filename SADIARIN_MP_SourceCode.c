@@ -143,10 +143,24 @@ int checkIfDead(struct PlayerStatus *player, bool *isPlayerDead) {
  *
  * */
 void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
-  printf("\n\n----------------------------------------\n");
+  char *bananaHarvestStatus =
+      farm->bananaWaterAmount == 4 ? "Ready to harvest" : "not yet";
+  char *mangoHarvestStatus =
+      farm->mangoWaterAmount == 8 ? "Ready to harvest" : "not yet";
+  char *cornHavestStatus =
+      farm->cornWaterAmount == 6 ? "Ready to harvest" : "not yet";
+
+  printf("\n----------------------------------------\n");
   printf("|    ***** Your Farm Status *****    |\n");
   printf("----------------------------------------\n");
   printf("Energy: %d/30\n", player->energy);
+  printf("Gold: %dG\n", player->gold);
+  printf("Banana Seeds (Bag): %d\n", player->bananaSeeds);
+  printf("Mango Seeds (Bag): %d\n", player->mangoSeeds);
+  printf("Corn Seeds (Bag): %d\n", player->cornSeeds);
+  printf("Owned Banana Crops (kg): %d\n", player->bananaCrops);
+  printf("Owned Mango Crops (kg): %d\n", player->mangoCrops);
+  printf("Owned Corn Crops (kg): %d\n", player->cornCrops);
   printf("----------------------------------------\n");
   // show crops here (Banana, Mango, Corn)
   printf("Tilled plots: %d/30\n", farm->tilledPlots);
@@ -154,6 +168,14 @@ void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("Planted bananas: %d/30\n", farm->bananaPlots);
   printf("Planted mangoes: %d/30\n", farm->mangoPlots);
   printf("Planted corns: %d/30\n", farm->cornPlots);
+  printf("----------------------------------------\n");
+  printf("**** Harvest Status: ****\n");
+  printf("Banana crops: %s | Water amount: %d/4\n", bananaHarvestStatus,
+         farm->bananaWaterAmount);
+  printf("Mango crops: %s | Water amount: %d/8\n", mangoHarvestStatus,
+         farm->mangoWaterAmount);
+  printf("Corn crops: %s | Water amount: %d/6\n", cornHavestStatus,
+         farm->cornWaterAmount);
   printf("----------------------------------------\n");
   printf("Enter 1 - Till plots\n");
   printf("Enter 2 - Sow seeds\n");
@@ -779,10 +801,9 @@ void buySeeds(struct PlayerStatus *player) {
 
   do {
     printf("\n What type of seed do you want to buy?\n");
-    printf("Enter 1 ");
-    printf("\n1 for Banana Seeds");
-    printf("\n2 for Mango Seeds");
-    printf("\n3 for Corn Seeds");
+    printf("\n1 for Banana Seeds (costs 3 gold)");
+    printf("\n2 for Mango Seeds (costs 7 gold)");
+    printf("\n3 for Corn Seeds (costs 5 gold)");
     printf("\nEnter number of the type of seed to buy (enter 0 to cancel): ");
     scanf(" %d", &seedType);
 
@@ -815,6 +836,8 @@ void buySeeds(struct PlayerStatus *player) {
       printf("\nYou successfully bought %d bag of banana seeds!\n", seedAmount);
       player->gold -= finalPrice;
       printf("-%d gold\n", finalPrice);
+
+      player->bananaSeeds += seedAmount;
       break;
     case 2:
       // mango - 7 gold
@@ -829,6 +852,9 @@ void buySeeds(struct PlayerStatus *player) {
 
       printf("\nYou successfully bought %d bag of mango seeds!\n", seedAmount);
       player->gold -= finalPrice;
+      printf("-%d gold\n", finalPrice);
+
+      player->mangoSeeds += seedAmount;
       break;
     case 3:
       // corn - 5 gold
@@ -843,6 +869,9 @@ void buySeeds(struct PlayerStatus *player) {
 
       printf("\nYou successfully bought %d bag of corn seeds!\n", seedAmount);
       player->gold -= finalPrice;
+      printf("-%d gold\n", finalPrice);
+
+      player->cornSeeds += seedAmount;
       break;
     default:
       // checks if int input is valid
