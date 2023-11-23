@@ -1045,7 +1045,7 @@ int main() {
       break;
     case 3:
       printf("\nYou chose to Go to Shop!\n");
-      // function here
+      goToShop(&player);
       break;
     case 4:
       printf("\nThank you for playing Harvest Sun!\n");
