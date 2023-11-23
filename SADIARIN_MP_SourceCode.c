@@ -207,6 +207,12 @@ void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
     printf("Enter amount of plots to till (enter 0 to cancel): ");
     scanf(" %d", &plotsToTillAmount);
 
+    while (plotsToTillAmount < 0) {
+      printf("\n[ INVALID INPUT ] Your input amount is less than 0.\n");
+      printf("Enter amount of plots to till (enter 0 to cancel): ");
+      scanf(" %d", &plotsToTillAmount);
+    }
+
     if (plotsToTillAmount == 0) {
       return;
     }
