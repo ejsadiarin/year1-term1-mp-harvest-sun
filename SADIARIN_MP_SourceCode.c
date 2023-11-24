@@ -867,12 +867,10 @@ void
 
 /**
  * This function simulates the player going home, advancing to the next day, and handling daily tasks such as resetting energy, taxing gold for breakfast, and updating crop watering status on the farm. It also checks if the player is dead due to starvation using the 'checkIfDead' function.
- * ---
  * @note Precondition: 
  * (1) The 'player' parameter is a valid pointer to a struct of type 'PlayerStatus' containing information about the player's current status, including gold, energy, and day. 
  * (2) The 'farm' parameter is a pointer to a struct 'FarmStatus' containing information about crop watering. 
  * (3) The 'isPlayerDead' parameter is a pointer to a boolean flag indicating whether the player is dead.
- * ---
  * @param *player: Pointer to a struct PlayerStatus representing the player's status.
  * @param *farm: Pointer to a struct FarmStatus representing the farm's status.
  * @param *isPlayerDead: Pointer to a boolean flag indicating whether the player is dead.
