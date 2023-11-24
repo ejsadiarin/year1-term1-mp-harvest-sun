@@ -749,29 +749,38 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
       if (player->energy < farm->mangoPlots) {
         printf("Not enough energy to harvest %d amount of crops\n",
                farm->mangoPlots);
+        exitFlag = 1;
       }
-
-      if (farm->canHarvestMango) {
-        printf("Bountiful HARVEST!\n");
-        printf("You harvested %d crops of mango\n", player->mangoCrops);
-        player->mangoCrops++;
+      // CANCEL CONDITION: check if cannot harvest
+      else if (!farm->canHarvestMango) {
+        printf("Not enough water to harvest mango crops.\n");
+        printf("Your mango crop water status: %d/4\n", farm->mangoWaterAmount);
+        exitFlag = 1;
+      }
+      // if all conditions are met:
+      else {
+        player->mangoCrops += farm->mangoPlots;
         // update untilledPlots and tilledPlots to amount of plots to harvest
         farm->untilledPlots += farm->mangoPlots;
+        if (farm->untilledPlots > 30) {
+          farm->untilledPlots = 30;
+        }
         farm->tilledPlots -= farm->mangoPlots;
+        if (farm->tilledPlots <= 0) {
+          farm->tilledPlots = 0;
+        }
         // update energy
         player->energy -= farm->mangoPlots;
         // update mangoPlots
         farm->mangoPlots = 0;
         // reset harvest flag
         farm->canHarvestMango = false;
-        return;
+        // reset water status
+        farm->mangoWaterAmount = 0;
+        printf("Bountiful HARVEST!\n");
+        printf("You harvested %d crops of mango\n", player->mangoCrops);
+        exitFlag = 1;
       }
-
-      // if cannot harvest
-      printf("Not enough water to harvest mango crops.\n");
-      printf("Your mango crop water status: %d/8\n", farm->mangoWaterAmount);
-
-      return;
     }
 
     // update corn
@@ -780,31 +789,39 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
       if (player->energy < farm->cornPlots) {
         printf("Not enough energy to harvest %d amount of crops\n",
                farm->cornPlots);
+        exitFlag = 1;
       }
-
-      if (farm->canHarvestCorn) {
-        printf("Bountiful HARVEST!\n");
-        printf("You harvested %d crops of corn\n", farm->cornPlots);
-        player->cornCrops++;
+      // CANCEL CONDITION: check if cannot harvest
+      else if (!farm->canHarvestCorn) {
+        printf("Not enough water to harvest corn crops.\n");
+        printf("Your corn crop water status: %d/4\n", farm->cornWaterAmount);
+        exitFlag = 1;
+      }
+      // if all conditions are met:
+      else {
+        player->cornCrops += farm->cornPlots;
         // update untilledPlots and tilledPlots to amount of plots to harvest
         farm->untilledPlots += farm->cornPlots;
+        if (farm->untilledPlots > 30) {
+          farm->untilledPlots = 30;
+        }
         farm->tilledPlots -= farm->cornPlots;
+        if (farm->tilledPlots <= 0) {
+          farm->tilledPlots = 0;
+        }
         // update energy
         player->energy -= farm->cornPlots;
         // update cornPlots
         farm->cornPlots = 0;
         // reset harvest flag
         farm->canHarvestCorn = false;
-        return;
+        // reset water status
+        farm->cornWaterAmount = 0;
+        printf("Bountiful HARVEST!\n");
+        printf("You harvested %d crops of corn\n", player->cornCrops);
+        exitFlag = 1;
       }
-
-      // if cannot harvest
-      printf("Not enough water to harvest corn crops.\n");
-      printf("Your corn crop water status: %d/6\n", farm->cornWaterAmount);
-
-      return;
     }
-    // } while (cropType != 0);
   } while (exitFlag == 0);
 }
 
