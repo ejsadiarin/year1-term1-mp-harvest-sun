@@ -245,17 +245,16 @@ void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
       // check if farm have enough untilledPlots to be tilledPlots
       if (farm->untilledPlots < plotsToTillAmount) {
         printf("\nNot enough untilled plots to till\n");
+        exitFlag = 1;
       }
       // check if player have enough energy
-      if (player->energy < plotsToTillAmount) {
+      else if (player->energy < plotsToTillAmount) {
         printf("Energy is not sufficient.\n");
+        exitFlag = 1;
       }
       // if all conditions are met
       else {
-        // terminate loop if conditions are met
-        exitFlag = 1;
-
-        // if player has enough energy then energy - plotsToTill
+        // update energy
         player->energy -= plotsToTillAmount;
 
         // update tilledPlots based on plotsToTill input from player
@@ -270,9 +269,10 @@ void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
           farm->untilledPlots = 0;
         }
         printf("\nNOTICE: Farm has been updated\n");
+        exitFlag = 1;
       }
     }
-  } while (!exitFlag);
+  } while (exitFlag == 0);
 }
 
 /**
