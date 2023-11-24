@@ -947,6 +947,7 @@ void buySeeds(struct PlayerStatus *player) {
   // TODO: check seedAmount input less than 0
   int seedAmount, seedType;
   int bananaBuyPrice, mangoBuyPrice, cornBuyPrice, finalPrice;
+  int exitFlag = 0;
 
   bananaBuyPrice = 3;
   mangoBuyPrice = 7;
@@ -968,6 +969,7 @@ void buySeeds(struct PlayerStatus *player) {
     printf("\nEnter number of the type of seed to buy (enter 0 to cancel): ");
     scanf(" %d", &seedType);
 
+    // input validation
     while (seedType > 3 || seedType < 0) {
       printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
       printf("\nEnter type of seed to buy (enter 0 to cancel): ");
@@ -975,71 +977,89 @@ void buySeeds(struct PlayerStatus *player) {
     }
 
     if (seedType == 0) {
-      printf("\nGoing back to main menu...\n");
-      return;
+      exitFlag = cancelAction(exitFlag);
     }
+    // if did not cancel proceed...
+    else {
 
-    printf("\nEnter amount of bag of seeds to buy: ");
-    scanf(" %d", &seedAmount);
+      printf("\nEnter amount of bag of seeds to buy: ");
+      scanf(" %d", &seedAmount);
 
-    switch (seedType) {
-    case 1:
-      // banana - 3 gold
-
-      finalPrice = bananaBuyPrice * seedAmount;
-
-      // CANCEL CONDITION: if not have enough gold
-      if (player->gold < finalPrice) {
-        printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
-        return;
+      if (seedAmount == 0) {
+        printf("\nYou bought nothing...\n");
+        exitFlag = 1;
       }
+      // if will buy...
+      else {
+        // input validation
+        while (seedAmount < 0) {
+          printf("\n[ INVALID INPUT ] Your input amount is less than 0.");
+          printf("\nEnter amount bag of seeds to buy: ");
+          scanf(" %d", &seedAmount);
+        }
 
-      printf("\nYou successfully bought %d bag of banana seeds!\n", seedAmount);
-      player->gold -= finalPrice;
-      printf("-%d gold\n", finalPrice);
+        if (seedType == 1) {
+          // banana - 3 gold
 
-      player->bananaSeeds += seedAmount;
-      break;
-    case 2:
-      // mango - 7 gold
+          finalPrice = bananaBuyPrice * seedAmount;
 
-      finalPrice = mangoBuyPrice * seedAmount;
+          // CANCEL CONDITION: if not have enough gold
+          if (player->gold < finalPrice) {
+            printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
+            exitFlag = 1;
+          }
 
-      // CANCEL CONDITION: if not have enough gold
-      if (player->gold < finalPrice) {
-        printf("\nNot enough gold to buy %d bag of seeds", seedAmount);
-        return;
+          printf("\nYou successfully bought %d bag of banana seeds!\n",
+                 seedAmount);
+          player->gold -= finalPrice;
+          printf("-%d gold\n", finalPrice);
+
+          player->bananaSeeds += seedAmount;
+          exitFlag = 1;
+        }
+
+        if (seedType == 2) {
+          // mango - 7 gold
+
+          finalPrice = mangoBuyPrice * seedAmount;
+
+          // CANCEL CONDITION: if not have enough gold
+          if (player->gold < finalPrice) {
+            printf("\nNot enough gold to buy %d bag of seeds", seedAmount);
+            exitFlag = 1;
+          }
+
+          printf("\nYou successfully bought %d bag of mango seeds!\n",
+                 seedAmount);
+          player->gold -= finalPrice;
+          printf("-%d gold\n", finalPrice);
+
+          player->mangoSeeds += seedAmount;
+          exitFlag = 1;
+        }
+
+        if (seedType == 3) {
+          // corn - 5 gold
+
+          finalPrice = cornBuyPrice * seedAmount;
+
+          // CANCEL CONDITION: if not have enough gold
+          if (player->gold < finalPrice) {
+            printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
+            exitFlag = 1;
+          }
+
+          printf("\nYou successfully bought %d bag of corn seeds!\n",
+                 seedAmount);
+          player->gold -= finalPrice;
+          printf("-%d gold\n", finalPrice);
+
+          player->cornSeeds += seedAmount;
+          exitFlag = 1;
+        }
       }
-
-      printf("\nYou successfully bought %d bag of mango seeds!\n", seedAmount);
-      player->gold -= finalPrice;
-      printf("-%d gold\n", finalPrice);
-
-      player->mangoSeeds += seedAmount;
-      break;
-    case 3:
-      // corn - 5 gold
-
-      finalPrice = cornBuyPrice * seedAmount;
-
-      // CANCEL CONDITION: if not have enough gold
-      if (player->gold < finalPrice) {
-        printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
-        return;
-      }
-
-      printf("\nYou successfully bought %d bag of corn seeds!\n", seedAmount);
-      player->gold -= finalPrice;
-      printf("-%d gold\n", finalPrice);
-
-      player->cornSeeds += seedAmount;
-      break;
-    default:
-      // checks if int input is valid
-      printf("\n[ INVALID INPUT ] Enter numbers 1-3 only.\n");
     }
-
-  } while (seedType != 0 || seedType < 0);
+  } while (exitFlag == 0);
 }
 
 /**
