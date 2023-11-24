@@ -260,9 +260,15 @@ void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
 
         // update tilledPlots based on plotsToTill input from player
         farm->tilledPlots += plotsToTillAmount;
+        if (farm->tilledPlots > 30) {
+          farm->tilledPlots = 30;
+        }
 
         // update untilledPlots (subtract to how many are now tilledPlots)
         farm->untilledPlots -= plotsToTillAmount;
+        if (farm->untilledPlots < 0) {
+          farm->untilledPlots = 0;
+        }
         printf("\nNOTICE: Farm has been updated\n");
       }
     }
@@ -537,6 +543,7 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
             farm->bananaWaterAmount++;
             farm->isBananaWatered = true;
             printf("Successfully watered banana crops!\n");
+            player->energy -= farm->bananaPlots;
 
             // ready to harvest
             if (farm->bananaWaterAmount == 4) {
@@ -578,6 +585,7 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
             farm->mangoWaterAmount++;
             farm->isMangoWatered = true;
             printf("Successfully watered mango crops!\n");
+            player->energy -= farm->mangoPlots;
 
             // ready to harvest
             if (farm->mangoWaterAmount == 8) {
@@ -619,6 +627,7 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
             farm->cornWaterAmount++;
             farm->isCornWatered = true;
             printf("Successfully watered corn crops!\n");
+            player->energy -= farm->cornPlots;
 
             // ready to harvest
             if (farm->cornWaterAmount == 6) {
@@ -654,6 +663,7 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
  */
 void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
   int cropType;
+  int exitFlag = 0;
 
   char *bananaHarvestStatus =
       farm->bananaWaterAmount == 4 ? "Ready to harvest" : "not yet";
@@ -671,23 +681,25 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
   printf("Corn crops: %s | Water amount: %d/6\n", cornHavestStatus,
          farm->cornWaterAmount);
   printf("----------------------------------------\n");
+  printf("Energy: %d/30\n", player->energy);
+  printf("----------------------------------------\n");
 
   do {
     printf("\n ***** What crop to harvest? ***** \n");
     printf("\n1 for Banana Crops");
     printf("\n2 for Mango Crops");
     printf("\n3 for Corn Crops");
-    printf("\nEnter type of crops to water (enter 0 to cancel): ");
+    printf("\nEnter type of crop to be harvested (enter 0 to cancel): ");
     scanf(" %d", &cropType);
 
     while (cropType > 3 || cropType < 0) {
       printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
-      printf("\nEnter type of crops to sow (enter 0 to cancel): ");
+      printf("\nEnter type of crop to sow (enter 0 to cancel): ");
       scanf(" %d", &cropType);
     }
 
     if (cropType == 0) {
-      return;
+      exitFlag = cancelAction(exitFlag);
     }
 
     // update banana
@@ -696,29 +708,39 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
       if (player->energy < farm->bananaPlots) {
         printf("Not enough energy to harvest %d amount of crops\n",
                farm->bananaPlots);
+        exitFlag = 1;
       }
-
-      if (farm->canHarvestBanana) {
-        printf("Bountiful HARVEST!\n");
-        printf("You harvested %d crops of banana\n", farm->bananaPlots);
-        player->bananaCrops++;
+      // CANCEL CONDITION: check if cannot harvest
+      else if (!farm->canHarvestBanana) {
+        printf("Not enough water to harvest banana crops.\n");
+        printf("Your banana crop water status: %d/4\n",
+               farm->bananaWaterAmount);
+        exitFlag = 1;
+      }
+      // if all conditions are met:
+      else {
+        player->bananaCrops += farm->bananaPlots;
         // update untilledPlots and tilledPlots to amount of plots to harvest
         farm->untilledPlots += farm->bananaPlots;
+        if (farm->untilledPlots > 30) {
+          farm->untilledPlots = 30;
+        }
         farm->tilledPlots -= farm->bananaPlots;
+        if (farm->tilledPlots <= 0) {
+          farm->tilledPlots = 0;
+        }
         // update energy
         player->energy -= farm->bananaPlots;
         // update bananaPlots
         farm->bananaPlots = 0;
         // reset harvest flag
         farm->canHarvestBanana = false;
-        return;
+        // reset water status
+        farm->bananaWaterAmount = 0;
+        printf("Bountiful HARVEST!\n");
+        printf("You harvested %d crops of banana\n", player->bananaCrops);
+        exitFlag = 1;
       }
-
-      // if cannot harvest
-      printf("Not enough water to harvest banana crops.\n");
-      printf("Your banana crop water status: %d/4\n", farm->bananaWaterAmount);
-
-      return;
     }
 
     // update mango
@@ -731,7 +753,7 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
 
       if (farm->canHarvestMango) {
         printf("Bountiful HARVEST!\n");
-        printf("You harvested %d crops of mango\n", farm->mangoPlots);
+        printf("You harvested %d crops of mango\n", player->mangoCrops);
         player->mangoCrops++;
         // update untilledPlots and tilledPlots to amount of plots to harvest
         farm->untilledPlots += farm->mangoPlots;
@@ -783,7 +805,7 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
       return;
     }
     // } while (cropType != 0);
-  } while (cropType != 0 || cropType < 0);
+  } while (exitFlag == 0);
 }
 
 /**
@@ -881,6 +903,9 @@ void goHome(struct PlayerStatus *player, struct FarmStatus *farm,
     printf("-10 gold for eating breakfast\n");
     printf("Eating breakfast... nom nom nom\n\n");
     player->gold -= 10;
+    if (player->gold <= 0) {
+      player->gold = 0;
+    }
 
     // reset water status for each crop type
     farm->isBananaWatered = false;
@@ -902,6 +927,7 @@ void goHome(struct PlayerStatus *player, struct FarmStatus *farm,
  * representing the player's status.
  */
 void buySeeds(struct PlayerStatus *player) {
+  // TODO: check seedAmount input less than 0
   int seedAmount, seedType;
   int bananaBuyPrice, mangoBuyPrice, cornBuyPrice, finalPrice;
 
@@ -1012,6 +1038,7 @@ void buySeeds(struct PlayerStatus *player) {
  * representing the player's status.
  */
 void sellCrops(struct PlayerStatus *player) {
+  // TODO: check cropsAmount input less than 0
   int cropsAmount, cropType;
   int bananaSellPrice, mangoSellPrice, cornSellPrice, finalSellPrice;
 
