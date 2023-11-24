@@ -1,5 +1,11 @@
-#include <stdbool.h>
-#include <stdio.h>
+/***************************************************************************************
+This is to certify that this project is my own work, based on my personal efforts in studying and
+applying the concepts learned. I have constructed the functions and their respective
+algorithms and corresponding code by myself. The program was run, tested, and
+debugged by my own efforts. I further certify that I have not copied in part or whole or
+otherwise plagiarized the work of other students and/or persons.
+                                                 Edwin M. Sadiarin Jr., DLSU ID#12323004
+***************************************************************************************/
 
 /*
  * Description: This program is a strategic game called "HarvestSun", where
@@ -15,6 +21,8 @@
  * - stdbool.h library for boolean types
  * ]
  */
+#include <stdbool.h>
+#include <stdio.h>
 
 /* The program will end if:
  * (1) when the player starves for 3 consecutive days
@@ -957,7 +965,7 @@ void
             printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
             exitFlag = 1;
           } else {
-            // bypass patch
+            // error handling negative values bypass
             if (seedAmount == 0) {
               printf("\nYou bought nothing...\n");
               exitFlag = 1;
@@ -983,7 +991,7 @@ void
             printf("\nNot enough gold to buy %d bag of seeds", seedAmount);
             exitFlag = 1;
           } else {
-            // bypass patch
+            // error handling negative values bypass
             if (seedAmount == 0) {
               printf("\nYou bought nothing...\n");
               exitFlag = 1;
@@ -1009,7 +1017,7 @@ void
             printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
             exitFlag = 1;
           } else {
-            // bypass patch
+            // error handling negative values bypass
             if (seedAmount == 0) {
               printf("\nYou bought nothing...\n");
               exitFlag = 1;
@@ -1099,7 +1107,7 @@ void
             printf("\nNot enough banana crops to sell at that amount.\n");
             exitFlag = 1;
           } else {
-            // bypass patch
+            // error handling negative values bypass
             if (cropsAmount == 0) {
               printf("\nYou sold nothing...\n");
               exitFlag = 1;
@@ -1125,7 +1133,7 @@ void
             printf("\nNot enough mango crops to sell at that amount.\n");
             exitFlag = 1;
           } else {
-            // bypass patch
+            // error handling negative values bypass
             if (cropsAmount == 0) {
               printf("\nYou sold nothing...\n");
               exitFlag = 1;
@@ -1151,7 +1159,7 @@ void
             printf("\nNot enough corn crops to sell at that amount.\n");
             exitFlag = 1;
           } else {
-            // bypass patch
+            // error handling negative values bypass
             if (cropsAmount == 0) {
               printf("\nYou sold nothing...\n");
               exitFlag = 1;
