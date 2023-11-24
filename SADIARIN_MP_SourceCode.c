@@ -9,8 +9,8 @@
  *              is the key! Look out for "calamities" that challenges your very
  *              own tenacity. Play now and see what you're made of.
  * Programmed by:  Sadiarin, Edwin Jr. M., CCPROG1-S19A
- * Last modified: <date when last revision was made>
- * Version: 2
+ * Last modified: November 24, 2023
+ * Version: 3
  * [Acknowledgements:
  * - stdbool.h library for boolean types
  * ]
@@ -58,15 +58,13 @@ struct FarmStatus {
 
 /*
  * This function displays the main menu options and current of the player.
- * ---
- * @note Precondition: The function assumes that the 'player' parameter is a
- * valid pointer to a struct of type 'PlayerStatus' containing information about
- * the player's current status, including gold, energy, and hunger.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
+ * @note Precondition: 
+ * (1) The 'player' parameter is a valid pointer to a struct of type 'PlayerStatus' containing information about the player's current status, including gold, energy, and hunger.
+ * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus representing the player's status.
  */
-void displayMainMenuOptions(struct PlayerStatus *player) {
+void 
+  displayMainMenuOptions(struct PlayerStatus *player) 
+{
 
   printf("----------------------------------------\n");
   printf("|    ***** Choose your Action *****    |\n");
@@ -85,27 +83,20 @@ void displayMainMenuOptions(struct PlayerStatus *player) {
 }
 
 /**
- * This function checks if the player is dead due to starvation and updates the
- * status. Provides warnings for each starved day.
- * ---
- * @note Precondition: The function assumes that the 'player' parameter is a
- * valid pointer to a struct of type 'PlayerStatus' containing information about
- * the player's current status, including gold and starvation status. The
- * 'isPlayerDead' parameter is a pointer to a boolean flag indicating whether
- * the player is dead.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
- * @param bool *isPlayerDead: Pointer to a boolean flag indicating whether the
- * player is dead.
- * ---
- * @return Always returns 0. The function modifies the 'isPlayerDead' flag and
- *         provides feedback through console output.
+ * This function checks if the player is dead due to starvation and updates the status. Provides warnings for each starved day.
+ * @note Precondition: 
+ * (1) The 'player' parameter is a valid pointer to a struct of type 'PlayerStatus' containing information about the player's current status, including gold, energy, and day. 
+ * (2) The 'isPlayerDead' parameter is a pointer to a boolean flag indicating whether the player is dead.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
+ * @param *isPlayerDead: Pointer to a boolean flag indicating whether the player is dead.
+ * @return Modifies the 'isPlayerDead' flag and provides feedback through console output and returns 0 if called successfully.
  */
-int checkIfDead(struct PlayerStatus *player, bool *isPlayerDead) {
+int 
+  checkIfDead(struct PlayerStatus *player,
+              bool *isPlayerDead) 
+{
   // if 3/3 starvedDay not die, next day: die (die at 4th day when starving)
-  // this is passed by value, so it copies it into a new variable (not modifies
-  // the original):
+  // this is passed by value, so it copies it into a new variable (not modifies the original):
   // int starvedDay = player->starvedDay;
 
   if (player->gold < 10) {
@@ -142,7 +133,16 @@ int checkIfDead(struct PlayerStatus *player, bool *isPlayerDead) {
   return 0;
 }
 
-int cancelAction(int inputAction) {
+/**
+ * This function sets the integer parameter 'inputAction' to 1 if it's initial value is 0.
+ * @note Precondition:
+ * (1) Parameter is non-negative.
+ * @param inputAction: A valid integer representing a player's input.
+ * @return 1 if 'inputAction' is initially 0, 0 if otherwise.
+ * */
+int 
+  cancelAction(int inputAction) 
+{
   // return 1 if cancelled, otherwise return 0;
   if (inputAction == 0) {
     printf("Cancelling action...\n");
@@ -154,20 +154,14 @@ int cancelAction(int inputAction) {
 /* **************** FARM RELATED FUNCTIONS START ***************** */
 
 /**
- * This function displays the farm status and available actions for the player
- * on the farm.
- * ---
- * @note Precondition: The function assumes that the 'player' and 'farm'
- * parameters are valid pointers to structs of type 'PlayerStatus' and
- * 'FarmStatus,' respectively, containing information about the player's and
- * farm's current status.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
- * @param struct FarmStatus *farm: Pointer to a struct FarmStatus representing
- * the farm's status.
+ * This function displays the farm status and available actions for the player on the farm.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
+ * @param *farm: Pointer to a struct FarmStatus representing the farm's status.
  */
-void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
+void 
+  displayFarmOptions(struct PlayerStatus *player,
+                     struct FarmStatus *farm) 
+{
   char *bananaHarvestStatus =
       farm->bananaWaterAmount == 4 ? "Ready to harvest" : "not yet";
   char *mangoHarvestStatus =
@@ -212,18 +206,17 @@ void displayFarmOptions(struct PlayerStatus *player, struct FarmStatus *farm) {
 
 /**
  * This function tills a specified number of untilled plots on the farm.
- * ---
- * @note Precondition: The function assumes that the 'player' and 'farm'
- * parameters are valid pointers to structs of type 'PlayerStatus' and
- * 'FarmStatus,' respectively, containing information about the player's and
- * farm's current status.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
- * @param struct FarmStatus *farm: Pointer to a struct FarmStatus representing
- * the farm's status.
+ * @note Precondition: 
+ * (1) The 'player' parameter is valid pointers to structs of type 'PlayerStatus', containing information about the player's current status 
+ * (2) The 'farm' parameter is valid pointers to structs of type 'FarmStatus', containing information about the farm's current status 
+ * (3) Player's input is non-negative.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
+ * @param *farm: Pointer to a struct FarmStatus representing the farm's status.
  */
-void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
+void 
+  tillPlots(struct PlayerStatus *player,
+            struct FarmStatus *farm) 
+{
   int plotsToTillAmount;
   int exitFlag = 0;
 
@@ -277,18 +270,17 @@ void tillPlots(struct PlayerStatus *player, struct FarmStatus *farm) {
 
 /**
  * This function sows seeds on tilled plots in the farm.
- * ---
- * @note Precondition: The function assumes that the 'player' and 'farm'
- * parameters are valid pointers to structs of type 'PlayerStatus' and
- * 'FarmStatus,' respectively, containing information about the player's and
- * farm's current status.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
- * @param struct FarmStatus *farm: Pointer to a struct FarmStatus representing
- * the farm's status.
+ * @note Precondition: 
+ * (1) The 'player' parameter is valid pointers to structs of type 'PlayerStatus', containing information about the player's current status 
+ * (2) The 'farm' parameter is valid pointers to structs of type 'FarmStatus', containing information about the farm's current status 
+ * (3) Player's input is non-negative.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
+ * @param *farm: Pointer to a struct FarmStatus representing the farm's status.
  */
-void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
+void 
+  sowSeeds(struct PlayerStatus *player,
+           struct FarmStatus *farm) 
+{
   int seedsToSowAmount, seedType;
   int exitFlag = 0;
 
@@ -460,19 +452,18 @@ void sowSeeds(struct PlayerStatus *player, struct FarmStatus *farm) {
 }
 
 /**
- * This function waters crops in the farm based on the player's choice.
- * ---
- * @note Precondition: The function assumes that the 'player' and 'farm'
- * parameters are valid pointers to structs of type 'PlayerStatus' and
- * 'FarmStatus,' respectively, containing information about the player's and
- * farm's current status.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
- * @param struct FarmStatus *farm: Pointer to a struct FarmStatus representing
- * the farm's status.
+ * This function waters crops in the farm based on the player's input.
+ * @note Precondition: 
+ * (1) The 'player' parameter is valid pointers to structs of type 'PlayerStatus', containing information about the player's current status 
+ * (2) The 'farm' parameter is valid pointers to structs of type 'FarmStatus', containing information about the farm's current status 
+ * (3) Player's input is non-negative.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
+ * @param *farm: Pointer to a struct FarmStatus representing the farm's status.
  */
-void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
+void 
+  waterCrops(struct PlayerStatus *player,
+             struct FarmStatus *farm) 
+{
   int cropType;
   int exitFlag = 0;
 
@@ -649,19 +640,18 @@ void waterCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
 }
 
 /**
- * This function harvests crops in the farm based on the player's choice.
- * ---
- * @note Precondition: The function assumes that the 'player' and 'farm'
- * parameters are valid pointers to structs of type 'PlayerStatus' and
- * 'FarmStatus,' respectively, containing information about the player's and
- * farm's current status.
- * ---
- * @param struct PlayerStatus *player:  Pointer to a struct PlayerStatus
- * representing the player's status.
- * @param struct FarmStatus *farm: Pointer to a struct FarmStatus representing
- * the farm's status.
+ * This function harvests crops in the farm based on the player's input.
+ * @note Precondition: 
+ * (1) The 'player' parameter is valid pointers to structs of type 'PlayerStatus', containing information about the player's current status 
+ * (2) The 'farm' parameter is valid pointers to structs of type 'FarmStatus', containing information about the farm's current status 
+ * (3) Player's input is non-negative.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
+ * @param *farm: Pointer to a struct FarmStatus representing the farm's status.
  */
-void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
+void 
+  harvestCrops(struct PlayerStatus *player, 
+               struct FarmStatus *farm) 
+{
   int cropType;
   int exitFlag = 0;
 
@@ -826,20 +816,17 @@ void harvestCrops(struct PlayerStatus *player, struct FarmStatus *farm) {
 }
 
 /**
- * This function enters the farm management interface and allows the player to
- * perform various actions.
- * ---
- * @note Precondition: The function assumes that the 'player' and 'farm'
- * parameters are valid pointers to structs of type 'PlayerStatus' and
- * 'FarmStatus,' respectively, containing information about the player's and
- * farm's current status.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
- * @param struct FarmStatus *farm: Pointer to a struct FarmStatus representing
- * the farm's status.
+ * This function enters the farm management interface and allows the player to perform farm-related actions.
+ * @note Precondition: 
+ * (1) The 'player' parameter is valid pointers to structs of type 'PlayerStatus', containing information about the player's current status 
+ * (2) The 'farm' parameter is valid pointers to structs of type 'FarmStatus', containing information about the farm's current status 
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
+ * @param *farm: Pointer to a struct FarmStatus representing the farm's status.
  */
-void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
+void 
+  goToFarm(struct PlayerStatus *player,
+           struct FarmStatus *farm) 
+{
 
   int playerChoice;
 
@@ -879,27 +866,22 @@ void goToFarm(struct PlayerStatus *player, struct FarmStatus *farm) {
 /* **************** FARM RELATED FUNCTIONS END ***************** */
 
 /**
- * This function simulates the player going home, advancing to the next day, and
- * handling daily tasks such as resetting energy, taxing gold for breakfast, and
- * updating crop watering status on the farm. It also checks if the player is
- * dead due to starvation using the 'checkIfDead' function.
+ * This function simulates the player going home, advancing to the next day, and handling daily tasks such as resetting energy, taxing gold for breakfast, and updating crop watering status on the farm. It also checks if the player is dead due to starvation using the 'checkIfDead' function.
  * ---
- * @note Precondition: The function assumes that the 'player' parameter is a
- * valid pointer to a struct of type 'PlayerStatus' containing information about
- * the player's current status, including gold, energy, and day. The 'farm'
- * parameter is a pointer to a struct 'FarmStatus' containing information about
- * crop watering. The 'isPlayerDead' parameter is a pointer to a boolean flag
- * indicating whether the player is dead.
+ * @note Precondition: 
+ * (1) The 'player' parameter is a valid pointer to a struct of type 'PlayerStatus' containing information about the player's current status, including gold, energy, and day. 
+ * (2) The 'farm' parameter is a pointer to a struct 'FarmStatus' containing information about crop watering. 
+ * (3) The 'isPlayerDead' parameter is a pointer to a boolean flag indicating whether the player is dead.
  * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
- * @param struct FarmStatus *farm: Pointer to a struct FarmStatus representing
- * the farm's status.
- * @param isPlayerDead Pointer to a boolean flag indicating whether the player
- * is dead.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
+ * @param *farm: Pointer to a struct FarmStatus representing the farm's status.
+ * @param *isPlayerDead: Pointer to a boolean flag indicating whether the player is dead.
  */
-void goHome(struct PlayerStatus *player, struct FarmStatus *farm,
-            bool *isPlayerDead) {
+void 
+  goHome(struct PlayerStatus *player,
+         struct FarmStatus *farm,
+         bool *isPlayerDead) 
+{
 
   checkIfDead(player, isPlayerDead);
 
@@ -932,19 +914,15 @@ void goHome(struct PlayerStatus *player, struct FarmStatus *farm,
 }
 
 /**
- * This function allows the player to buy seeds of different types based on user
- * input. It updates the player's inventory and gold based on the type and
- * amount of seeds purchased.
- * ---
- * @note Precondition: The function assumes that the 'player' parameter is a
- * valid pointer to a struct of type 'PlayerStatus' containing information about
- * the player's current status, including gold and seed inventories.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
+ * This function allows the player to buy seeds of different types based on user input. It updates the player's inventory and gold based on the type and amount of seeds purchased.
+ * @note Precondition: 
+ * (1) The 'player' parameter is a valid pointer to a struct of type 'PlayerStatus' containing information about the player's current status, including gold and seed inventories.
+ * (2) Player input is non-negative.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
  */
-void buySeeds(struct PlayerStatus *player) {
-  // TODO: check seedAmount input less than 0
+void
+  buySeeds(struct PlayerStatus *player) 
+{
   int seedAmount, seedType;
   int bananaBuyPrice, mangoBuyPrice, cornBuyPrice, finalPrice;
   int exitFlag = 0;
@@ -1007,15 +985,15 @@ void buySeeds(struct PlayerStatus *player) {
           if (player->gold < finalPrice) {
             printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
             exitFlag = 1;
+          } else {
+            printf("\nYou successfully bought %d bag of banana seeds!\n",
+                   seedAmount);
+            player->gold -= finalPrice;
+            printf("-%d gold\n", finalPrice);
+
+            player->bananaSeeds += seedAmount;
+            exitFlag = 1;
           }
-
-          printf("\nYou successfully bought %d bag of banana seeds!\n",
-                 seedAmount);
-          player->gold -= finalPrice;
-          printf("-%d gold\n", finalPrice);
-
-          player->bananaSeeds += seedAmount;
-          exitFlag = 1;
         }
 
         if (seedType == 2) {
@@ -1027,15 +1005,15 @@ void buySeeds(struct PlayerStatus *player) {
           if (player->gold < finalPrice) {
             printf("\nNot enough gold to buy %d bag of seeds", seedAmount);
             exitFlag = 1;
+          } else {
+            printf("\nYou successfully bought %d bag of mango seeds!\n",
+                   seedAmount);
+            player->gold -= finalPrice;
+            printf("-%d gold\n", finalPrice);
+
+            player->mangoSeeds += seedAmount;
+            exitFlag = 1;
           }
-
-          printf("\nYou successfully bought %d bag of mango seeds!\n",
-                 seedAmount);
-          player->gold -= finalPrice;
-          printf("-%d gold\n", finalPrice);
-
-          player->mangoSeeds += seedAmount;
-          exitFlag = 1;
         }
 
         if (seedType == 3) {
@@ -1047,15 +1025,15 @@ void buySeeds(struct PlayerStatus *player) {
           if (player->gold < finalPrice) {
             printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
             exitFlag = 1;
+          } else {
+            printf("\nYou successfully bought %d bag of corn seeds!\n",
+                   seedAmount);
+            player->gold -= finalPrice;
+            printf("-%d gold\n", finalPrice);
+
+            player->cornSeeds += seedAmount;
+            exitFlag = 1;
           }
-
-          printf("\nYou successfully bought %d bag of corn seeds!\n",
-                 seedAmount);
-          player->gold -= finalPrice;
-          printf("-%d gold\n", finalPrice);
-
-          player->cornSeeds += seedAmount;
-          exitFlag = 1;
         }
       }
     }
@@ -1063,21 +1041,18 @@ void buySeeds(struct PlayerStatus *player) {
 }
 
 /**
- * This function allows the player to sell crops of different types based on
- * user input. It updates the player's inventory, specifically the crop
- * quantities and gold, based on the type and amount of crops sold.
- * ---
- * @note Precondition: The function assumes that the 'player' parameter is a
- * valid pointer to a struct of type 'PlayerStatus' containing information about
- * the player's current status, including gold and crop inventories.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
+ * This function allows the player to sell crops of different types based on user input. It updates the player's inventory, specifically the crop quantities and gold, based on the type and amount of crops sold.
+ * @note Precondition: 
+ * (1) The 'player' parameter is a valid pointer to a struct of type 'PlayerStatus' containing information about the player's current status, including gold and crop inventories. 
+ * (2) Player input is non-negative.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
  */
-void sellCrops(struct PlayerStatus *player) {
-  // TODO: check cropsAmount input less than 0
+void 
+  sellCrops(struct PlayerStatus *player) 
+{
   int cropsAmount, cropType;
   int bananaSellPrice, mangoSellPrice, cornSellPrice, finalSellPrice;
+  int exitFlag = 1;
 
   bananaSellPrice = 4;
   mangoSellPrice = 10;
@@ -1101,90 +1076,106 @@ void sellCrops(struct PlayerStatus *player) {
 
     while (cropType > 3 || cropType < 0) {
       printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
-      printf("\nEnter type of seed to buy (enter 0 to cancel): ");
+      printf(
+          "\nEnter number of the type of crop to sell (enter 0 to cancel): ");
       scanf(" %d", &cropType);
     }
 
     if (cropType == 0) {
-      printf("\nGoing back to main menu...\n");
-      return;
+      exitFlag = cancelAction(exitFlag);
     }
+    // if did not cancel proceed...
+    else {
 
-    printf("\nEnter amount of kilograms (kg) of crops to sell: ");
-    scanf(" %d", &cropsAmount);
+      printf("\nEnter amount of kilograms (kg) of crops to sell: ");
+      scanf(" %d", &cropsAmount);
 
-    switch (cropType) {
-    case 1:
-      // banana - 4 gold
-
-      // CANCEL CONDITION: if don't have enough selected crops
-      if (player->bananaCrops < cropsAmount) {
-        printf("Not enough banana crops to sell at that amount.\n");
-        return;
+      if (cropsAmount == 0) {
+        printf("\nYou sold nothing...\n");
+        exitFlag = 1;
       }
+      // if will sell...
+      else {
+        // input validation
+        while (cropsAmount < 0) {
+          printf("\n[ INVALID INPUT ] Your input amount is less than 0.");
+          printf("\nEnter amount kilograms (kg) of crops to sell: ");
+          scanf(" %d", &cropsAmount);
+        }
 
-      player->bananaCrops -= cropsAmount;
-      printf("\nYou successfully sold %d kg of banana crops!\n", cropsAmount);
+        if (cropType == 1) {
+          // banana - 4 gold
 
-      finalSellPrice = bananaSellPrice * cropsAmount;
+          // CANCEL CONDITION: if don't have enough selected crops
+          if (player->bananaCrops < cropsAmount) {
+            printf("\nNot enough banana crops to sell at that amount.\n");
+            exitFlag = 1;
+          } else {
+            // update selected crop
+            player->bananaCrops -= cropsAmount;
+            finalSellPrice = bananaSellPrice * cropsAmount;
+            // update gold
+            player->gold += finalSellPrice;
+            printf("\nYou successfully sold %d kg of banana crops!\n",
+                   cropsAmount);
+            printf("+%d gold acquired.\n", finalSellPrice);
+            exitFlag = 1;
+          }
+        }
 
-      player->gold += finalSellPrice;
-      printf("+%d gold acquired.\n", finalSellPrice);
-      break;
-    case 2:
-      // mango - 10 gold
+        if (cropType == 2) {
+          // mango - 10 gold
 
-      // CANCEL CONDITION: if don't have enough selected crops
-      if (player->mangoCrops < cropsAmount) {
-        printf("Not enough mango crops to sell at that amount.\n");
-        return;
+          // CANCEL CONDITION: if don't have enough selected crops
+          if (player->mangoCrops < cropsAmount) {
+            printf("\nNot enough mango crops to sell at that amount.\n");
+            exitFlag = 1;
+          } else {
+            // update selected crop
+            player->mangoCrops -= cropsAmount;
+            finalSellPrice = mangoSellPrice * cropsAmount;
+            // update gold
+            player->gold += finalSellPrice;
+            printf("\nYou successfully sold %d kg of mango crops!\n",
+                   cropsAmount);
+            printf("+%d gold acquired.\n", finalSellPrice);
+            exitFlag = 1;
+          }
+        }
+
+        if (cropType == 3) {
+          // corn - 7 gold
+
+          // CANCEL CONDITION: if don't have enough selected crops
+          if (player->cornCrops < cropsAmount) {
+            printf("\nNot enough corn crops to sell at that amount.\n");
+            exitFlag = 1;
+          } else {
+            // update selected crop
+            player->cornCrops -= cropsAmount;
+            finalSellPrice = cornSellPrice * cropsAmount;
+            // update gold
+            player->gold += finalSellPrice;
+            printf("\nYou successfully sold %d kg of corn crops!\n",
+                   cropsAmount);
+            printf("+%d gold acquired.\n", finalSellPrice);
+            exitFlag = 1;
+          }
+        }
       }
-
-      player->mangoCrops -= cropsAmount;
-      printf("\nYou successfully sold %d kg of mango crops!\n", cropsAmount);
-
-      finalSellPrice = mangoSellPrice * cropsAmount;
-
-      player->gold += finalSellPrice;
-      printf("+%d gold acquired.\n", finalSellPrice);
-      break;
-    case 3:
-      // corn - 7 gold
-
-      // CANCEL CONDITION: if don't have enough selected crops
-      if (player->cornCrops < cropsAmount) {
-        printf("Not enough corn crops to sell at that amount.\n");
-        return;
-      }
-
-      player->cornCrops -= cropsAmount;
-      printf("\nYou successfully sold %d kg of corn crops!\n", cropsAmount);
-
-      finalSellPrice = cornSellPrice * cropsAmount;
-
-      player->gold += finalSellPrice;
-      printf("+%d gold acquired.\n", finalSellPrice);
-      break;
-    default:
-      // checks if int input is valid
-      printf("\n[ INVALID INPUT ] Enter numbers 1-3 only.\n");
     }
-
-  } while (cropType != 0 || cropType < 0);
+  } while (exitFlag == 0);
 }
 
 /**
- * This function allows the player to interact with the in-game shop for buying
- * seeds or selling crops.
- * ---
- * @note Precondition: The function assumes that the 'player' parameter is a
- * valid pointer to a struct of type 'PlayerStatus' containing information about
- * the player's current status, including gold, seed, and crop inventories.
- * ---
- * @param struct PlayerStatus *player: Pointer to a struct PlayerStatus
- * representing the player's status.
+ * This function allows the player to interact with the in-game shop for buying seeds or selling crops.
+ * @note Precondition: 
+ * (1) The 'player' parameter is a valid pointer to a struct of type 'PlayerStatus' containing information about the player's current status, including gold, seed, and crop inventories.
+ * @param *player: Pointer to a struct PlayerStatus representing the player's status.
  */
-void goToShop(struct PlayerStatus *player) {
+void 
+  goToShop(struct PlayerStatus *player) 
+{
   int playerChoice;
   do {
     printf("\n\n******* Welcome to the Shop! *******\n");
@@ -1215,21 +1206,6 @@ void goToShop(struct PlayerStatus *player) {
   } while (playerChoice != 3);
 }
 
-/**
- * The main function for the Harvest Sun game.
- *
- * This function initializes the player and farm status, displays the welcome
- * message, and provides a menu for the player to choose actions such as going
- * home, going to the farm, going to the shop, or quitting the game. It calls
- * corresponding functions for each action and continues until the player
- * chooses to quit or the player's character dies.
- * ---
- * @note Precondition: The function initializes the player and farm structures
- * and uses various other functions (e.g., 'displayMainMenuOptions', 'goHome',
- * 'goToFarm', 'goToShop') to handle different game actions.
- * ---
- * @return The function returns 0 upon successful execution.
- */
 int main() {
   struct PlayerStatus player;
   player.gold = 50;
