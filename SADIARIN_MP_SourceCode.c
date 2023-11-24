@@ -107,10 +107,8 @@ int
   case 1:
     printf("\n\n\n!!!!!!! >>>>>>>>>>>>>> WARNING <<<<<<<<<<<<<<<<< !!!!!!!\n");
     printf("[ STARVATION WARNING ]: your hunger status increased!\n");
-    printf("[ REMINDER ]: Make sure to have enough gold (10g) to eat breakfast "
-           "next day\n");
-    printf("[ REMINDER ]: If your hunger becomes 3/3, you will INEVITABLY DIE "
-           "the next day\n");
+    printf("[ REMINDER ]: Make sure to have enough gold (10g) to eat breakfast " "next day\n");
+    printf("[ REMINDER ]: If your hunger becomes 3/3, you will INEVITABLY DIE " "the next day\n");
     break;
   case 2:
     printf("\n\n\n!!!!!!! >>>>>>>>>>>>>> WARNING <<<<<<<<<<<<<<<<< !!!!!!!\n");
@@ -119,8 +117,7 @@ int
     break;
   case 3:
     printf("\n\n\n!!!!!!! >>>>>>>>>>>>>> WARNING <<<<<<<<<<<<<<<<< !!!!!!!\n");
-    printf("[ STARVATION DISASTER ]: YOUR HUNGER IS NOW 3/3, you will "
-           "INEVITABLY DIE the next day.\n");
+    printf("[ STARVATION DISASTER ]: YOUR HUNGER IS NOW 3/3, you will " "INEVITABLY DIE the next day.\n");
     break;
   case 4:
     printf("\nYou died due to starvation. Git gud!\n");
@@ -162,12 +159,9 @@ void
   displayFarmOptions(struct PlayerStatus *player,
                      struct FarmStatus *farm) 
 {
-  char *bananaHarvestStatus =
-      farm->bananaWaterAmount == 4 ? "Ready to harvest" : "not yet";
-  char *mangoHarvestStatus =
-      farm->mangoWaterAmount == 8 ? "Ready to harvest" : "not yet";
-  char *cornHavestStatus =
-      farm->cornWaterAmount == 6 ? "Ready to harvest" : "not yet";
+  char *bananaHarvestStatus = farm->bananaWaterAmount == 4 ? "Ready to harvest" : "not yet";
+  char *mangoHarvestStatus = farm->mangoWaterAmount == 8 ? "Ready to harvest" : "not yet";
+  char *cornHavestStatus = farm->cornWaterAmount == 6 ? "Ready to harvest" : "not yet";
 
   printf("\n----------------------------------------\n");
   printf("|    ***** Your Farm Status *****    |\n");
@@ -189,12 +183,9 @@ void
   printf("Planted corns: %d/30\n", farm->cornPlots);
   printf("----------------------------------------\n");
   printf("**** Harvest Status: ****\n");
-  printf("Banana crops: %s | Water amount: %d/4\n", bananaHarvestStatus,
-         farm->bananaWaterAmount);
-  printf("Mango crops: %s | Water amount: %d/8\n", mangoHarvestStatus,
-         farm->mangoWaterAmount);
-  printf("Corn crops: %s | Water amount: %d/6\n", cornHavestStatus,
-         farm->cornWaterAmount);
+  printf("Banana crops: %s | Water amount: %d/4\n", bananaHarvestStatus, farm->bananaWaterAmount);
+  printf("Mango crops: %s | Water amount: %d/8\n", mangoHarvestStatus, farm->mangoWaterAmount);
+  printf("Corn crops: %s | Water amount: %d/6\n", cornHavestStatus, farm->cornWaterAmount);
   printf("----------------------------------------\n");
   printf("Enter 1 - Till plots\n");
   printf("Enter 2 - Sow seeds\n");
@@ -356,8 +347,7 @@ void
             }
             // CANCEL CONDITION: check if energy is enough
             else if (seedsToSowAmount > player->energy) {
-              printf("Not enough energy to sow %d banana seeds\n",
-                     seedsToSowAmount);
+              printf("Not enough energy to sow %d banana seeds\n", seedsToSowAmount);
               exitFlag = 1;
             }
             // if all conditions are met:
@@ -391,8 +381,7 @@ void
             }
             // CANCEL CONDITION: check if energy is enough
             else if (seedsToSowAmount > player->energy) {
-              printf("Not enough energy to sow %d mango seeds\n",
-                     seedsToSowAmount);
+              printf("Not enough energy to sow %d mango seeds\n", seedsToSowAmount);
               exitFlag = 1;
             }
             // if all conditions are met:
@@ -426,8 +415,7 @@ void
             }
             // CANCEL CONDITION: check if energy is enough
             else if (seedsToSowAmount > player->energy) {
-              printf("Not enough energy to sow %d corn seeds\n",
-                     seedsToSowAmount);
+              printf("Not enough energy to sow %d corn seeds\n", seedsToSowAmount);
               exitFlag = 1;
             }
             // if all conditions are met:
@@ -471,18 +459,14 @@ void
   char *mangoWateredStatus = farm->isMangoWatered ? "YES" : "not yet";
   char *cornWateredStatus = farm->isCornWatered ? "YES" : "not yet";
 
-  bool allWatered = farm->isBananaWatered == true &&
-                    farm->isMangoWatered == true && farm->isCornWatered == true;
+  bool allWatered = farm->isBananaWatered == true && farm->isMangoWatered == true && farm->isCornWatered == true;
 
   printf("----------------------------------------\n");
   printf("**** Farm Status: ****\n");
   printf("Tilled plots: %d/30\n", farm->tilledPlots);
-  printf("Banana plots planted: %d | Watered status: %s\n", farm->bananaPlots,
-         bananaWateredStatus);
-  printf("Mango plots planted: %d | Watered status: %s\n", farm->mangoPlots,
-         mangoWateredStatus);
-  printf("Corn plots planted: %d | Watered status: %s\n", farm->cornPlots,
-         cornWateredStatus);
+  printf("Banana plots planted: %d | Watered status: %s\n", farm->bananaPlots, bananaWateredStatus);
+  printf("Mango plots planted: %d | Watered status: %s\n", farm->mangoPlots, mangoWateredStatus);
+  printf("Corn plots planted: %d | Watered status: %s\n", farm->cornPlots, cornWateredStatus);
   printf("----------------------------------------\n");
 
   if (allWatered) {
@@ -524,8 +508,7 @@ void
           }
           // CANCEL CONDITION: check if energy is enough
           else if (player->energy < farm->bananaPlots) {
-            printf("\n\nNot enough energy to water %d amount of crops\n",
-                   farm->bananaPlots);
+            printf("\n\nNot enough energy to water %d amount of crops\n", farm->bananaPlots);
             exitFlag = 1;
           }
           // if all conditions are met:
@@ -566,8 +549,7 @@ void
           }
           // CANCEL CONDITION: check if energy is enough
           else if (player->energy < farm->mangoPlots) {
-            printf("\n\nNot enough energy to water %d amount of crops\n",
-                   farm->mangoPlots);
+            printf("\n\nNot enough energy to water %d amount of crops\n", farm->mangoPlots);
             exitFlag = 1;
           }
           // if all conditions are met:
@@ -608,8 +590,7 @@ void
           }
           // CANCEL CONDITION: check if energy is enough
           else if (player->energy < farm->bananaPlots) {
-            printf("\n\nNot enough energy to water %d amount of crops\n",
-                   farm->bananaPlots);
+            printf("\n\nNot enough energy to water %d amount of crops\n", farm->bananaPlots);
             exitFlag = 1;
           }
           // if all conditions are met:
@@ -655,21 +636,15 @@ void
   int cropType;
   int exitFlag = 0;
 
-  char *bananaHarvestStatus =
-      farm->bananaWaterAmount == 4 ? "Ready to harvest" : "not yet";
-  char *mangoHarvestStatus =
-      farm->mangoWaterAmount == 8 ? "Ready to harvest" : "not yet";
-  char *cornHavestStatus =
-      farm->cornWaterAmount == 6 ? "Ready to harvest" : "not yet";
+  char *bananaHarvestStatus = farm->bananaWaterAmount == 4 ? "Ready to harvest" : "not yet";
+  char *mangoHarvestStatus = farm->mangoWaterAmount == 8 ? "Ready to harvest" : "not yet";
+  char *cornHavestStatus = farm->cornWaterAmount == 6 ? "Ready to harvest" : "not yet";
 
   printf("----------------------------------------\n");
   printf("**** Harvest Status: ****\n");
-  printf("Banana crops: %s | Water amount: %d/4\n", bananaHarvestStatus,
-         farm->bananaWaterAmount);
-  printf("Mango crops: %s | Water amount: %d/8\n", mangoHarvestStatus,
-         farm->mangoWaterAmount);
-  printf("Corn crops: %s | Water amount: %d/6\n", cornHavestStatus,
-         farm->cornWaterAmount);
+  printf("Banana crops: %s | Water amount: %d/4\n", bananaHarvestStatus, farm->bananaWaterAmount);
+  printf("Mango crops: %s | Water amount: %d/8\n", mangoHarvestStatus, farm->mangoWaterAmount);
+  printf("Corn crops: %s | Water amount: %d/6\n", cornHavestStatus, farm->cornWaterAmount);
   printf("----------------------------------------\n");
   printf("Energy: %d/30\n", player->energy);
   printf("----------------------------------------\n");
@@ -696,15 +671,13 @@ void
     if (cropType == 1) {
       // CANCEL CONDITION: check if energy is enough
       if (player->energy < farm->bananaPlots) {
-        printf("Not enough energy to harvest %d amount of crops\n",
-               farm->bananaPlots);
+        printf("Not enough energy to harvest %d amount of crops\n", farm->bananaPlots);
         exitFlag = 1;
       }
       // CANCEL CONDITION: check if cannot harvest
       else if (!farm->canHarvestBanana) {
         printf("Not enough water to harvest banana crops.\n");
-        printf("Your banana crop water status: %d/4\n",
-               farm->bananaWaterAmount);
+        printf("Your banana crop water status: %d/4\n", farm->bananaWaterAmount);
         exitFlag = 1;
       }
       // if all conditions are met:
@@ -737,8 +710,7 @@ void
     if (cropType == 2) {
       // CANCEL CONDITION: check if energy is enough
       if (player->energy < farm->mangoPlots) {
-        printf("Not enough energy to harvest %d amount of crops\n",
-               farm->mangoPlots);
+        printf("Not enough energy to harvest %d amount of crops\n", farm->mangoPlots);
         exitFlag = 1;
       }
       // CANCEL CONDITION: check if cannot harvest
@@ -777,8 +749,7 @@ void
     if (cropType == 3) {
       // CANCEL CONDITION: check if energy is enough
       if (player->energy < farm->cornPlots) {
-        printf("Not enough energy to harvest %d amount of crops\n",
-               farm->cornPlots);
+        printf("Not enough energy to harvest %d amount of crops\n", farm->cornPlots);
         exitFlag = 1;
       }
       // CANCEL CONDITION: check if cannot harvest
@@ -892,6 +863,8 @@ void
     printf("Day %d", player->day);
     printf(" *********************************\n\n");
 
+    // add calamities here
+
     // reset energy to full
     printf("REJUVENATED! Energy has been reset to full\n");
     player->energy = 30;
@@ -984,13 +957,19 @@ void
             printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
             exitFlag = 1;
           } else {
-            printf("\nYou successfully bought %d bag of banana seeds!\n",
-                   seedAmount);
-            player->gold -= finalPrice;
-            printf("-%d gold\n", finalPrice);
+            // bypass patch
+            if (seedAmount == 0) {
+              printf("\nYou bought nothing...\n");
+              exitFlag = 1;
+            }
+            else {
+              printf("\nYou successfully bought %d bag of banana seeds!\n", seedAmount);
+              player->gold -= finalPrice;
+              printf("-%d gold\n", finalPrice);
 
-            player->bananaSeeds += seedAmount;
-            exitFlag = 1;
+              player->bananaSeeds += seedAmount;
+              exitFlag = 1;
+            }
           }
         }
 
@@ -1004,13 +983,19 @@ void
             printf("\nNot enough gold to buy %d bag of seeds", seedAmount);
             exitFlag = 1;
           } else {
-            printf("\nYou successfully bought %d bag of mango seeds!\n",
-                   seedAmount);
-            player->gold -= finalPrice;
-            printf("-%d gold\n", finalPrice);
+            // bypass patch
+            if (seedAmount == 0) {
+              printf("\nYou bought nothing...\n");
+              exitFlag = 1;
+            } 
+            else {
+              printf("\nYou successfully bought %d bag of mango seeds!\n", seedAmount);
+              player->gold -= finalPrice;
+              printf("-%d gold\n", finalPrice);
 
-            player->mangoSeeds += seedAmount;
-            exitFlag = 1;
+              player->mangoSeeds += seedAmount;
+              exitFlag = 1;
+            }
           }
         }
 
@@ -1024,13 +1009,19 @@ void
             printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
             exitFlag = 1;
           } else {
-            printf("\nYou successfully bought %d bag of corn seeds!\n",
-                   seedAmount);
-            player->gold -= finalPrice;
-            printf("-%d gold\n", finalPrice);
+            // bypass patch
+            if (seedAmount == 0) {
+              printf("\nYou bought nothing...\n");
+              exitFlag = 1;
+            } 
+            else {
+              printf("\nYou successfully bought %d bag of corn seeds!\n", seedAmount);
+              player->gold -= finalPrice;
+              printf("-%d gold\n", finalPrice);
 
-            player->cornSeeds += seedAmount;
-            exitFlag = 1;
+              player->cornSeeds += seedAmount;
+              exitFlag = 1;
+            }
           }
         }
       }
@@ -1074,8 +1065,7 @@ void
 
     while (cropType > 3 || cropType < 0) {
       printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
-      printf(
-          "\nEnter number of the type of crop to sell (enter 0 to cancel): ");
+      printf("\nEnter number of the type of crop to sell (enter 0 to cancel): ");
       scanf(" %d", &cropType);
     }
 
@@ -1109,15 +1099,21 @@ void
             printf("\nNot enough banana crops to sell at that amount.\n");
             exitFlag = 1;
           } else {
-            // update selected crop
-            player->bananaCrops -= cropsAmount;
-            finalSellPrice = bananaSellPrice * cropsAmount;
-            // update gold
-            player->gold += finalSellPrice;
-            printf("\nYou successfully sold %d kg of banana crops!\n",
-                   cropsAmount);
-            printf("+%d gold acquired.\n", finalSellPrice);
-            exitFlag = 1;
+            // bypass patch
+            if (cropsAmount == 0) {
+              printf("\nYou sold nothing...\n");
+              exitFlag = 1;
+            } 
+            else {
+              // update selected crop
+              player->bananaCrops -= cropsAmount;
+              finalSellPrice = bananaSellPrice * cropsAmount;
+              // update gold
+              player->gold += finalSellPrice;
+              printf("\nYou successfully sold %d kg of banana crops!\n", cropsAmount);
+              printf("+%d gold acquired.\n", finalSellPrice);
+              exitFlag = 1;
+            }
           }
         }
 
@@ -1129,15 +1125,21 @@ void
             printf("\nNot enough mango crops to sell at that amount.\n");
             exitFlag = 1;
           } else {
-            // update selected crop
-            player->mangoCrops -= cropsAmount;
-            finalSellPrice = mangoSellPrice * cropsAmount;
-            // update gold
-            player->gold += finalSellPrice;
-            printf("\nYou successfully sold %d kg of mango crops!\n",
-                   cropsAmount);
-            printf("+%d gold acquired.\n", finalSellPrice);
-            exitFlag = 1;
+            // bypass patch
+            if (cropsAmount == 0) {
+              printf("\nYou sold nothing...\n");
+              exitFlag = 1;
+            } 
+            else {
+              // update selected crop
+              player->mangoCrops -= cropsAmount;
+              finalSellPrice = mangoSellPrice * cropsAmount;
+              // update gold
+              player->gold += finalSellPrice;
+              printf("\nYou successfully sold %d kg of mango crops!\n", cropsAmount);
+              printf("+%d gold acquired.\n", finalSellPrice);
+              exitFlag = 1;
+            }
           }
         }
 
@@ -1149,15 +1151,21 @@ void
             printf("\nNot enough corn crops to sell at that amount.\n");
             exitFlag = 1;
           } else {
-            // update selected crop
-            player->cornCrops -= cropsAmount;
-            finalSellPrice = cornSellPrice * cropsAmount;
-            // update gold
-            player->gold += finalSellPrice;
-            printf("\nYou successfully sold %d kg of corn crops!\n",
-                   cropsAmount);
-            printf("+%d gold acquired.\n", finalSellPrice);
-            exitFlag = 1;
+            // bypass patch
+            if (cropsAmount == 0) {
+              printf("\nYou sold nothing...\n");
+              exitFlag = 1;
+            } 
+            else {
+              // update selected crop
+              player->cornCrops -= cropsAmount;
+              finalSellPrice = cornSellPrice * cropsAmount;
+              // update gold
+              player->gold += finalSellPrice;
+              printf("\nYou successfully sold %d kg of corn crops!\n", cropsAmount);
+              printf("+%d gold acquired.\n", finalSellPrice);
+              exitFlag = 1;
+            }
           }
         }
       }
