@@ -925,6 +925,18 @@ void
     printf("Day %d", player->day);
     printf(" *********************************\n");
 
+    // reset energy to full
+    printf("\nREJUVENATED! Energy has been reset to full\n");
+    player->energy = 30;
+
+    // tax gold for breakfast & update hunger status
+    printf("-10 gold for eating breakfast\n");
+    printf("Eating breakfast... nom nom nom\n\n");
+    player->gold -= 10;
+    if (player->gold <= 0) {
+      player->gold = 0;
+    }
+
     // calamities here
     if (player->day == 20 || player->day == 36 || player->day == 43) {
       typhoonCalamity(farm);
@@ -938,17 +950,6 @@ void
       animalsAttack(player);
     }
 
-    // reset energy to full
-    printf("\nREJUVENATED! Energy has been reset to full\n");
-    player->energy = 30;
-
-    // tax gold for breakfast & update hunger status
-    printf("-10 gold for eating breakfast\n");
-    printf("Eating breakfast... nom nom nom\n\n");
-    player->gold -= 10;
-    if (player->gold <= 0) {
-      player->gold = 0;
-    }
 
     // reset water status for each crop type
     farm->isBananaWatered = false;
