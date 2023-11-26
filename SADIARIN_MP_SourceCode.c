@@ -871,6 +871,7 @@ void
 void
   payTaxToLand(struct PlayerStatus *player) 
 {
+  printf("\n!!! TAX COLLECTION !!!\n");
   printf("Tax collector INCOMING...\n");
   player->gold -= 50;
   printf("-50 gold.\n");
@@ -886,12 +887,16 @@ void
 void
   animalsAttack(struct PlayerStatus *player) 
 {
+  printf("\n!!!! ANIMALS ATTACK !!!!\n");
   // if no owned crops, reduce gold instead
   if (player->bananaCrops == 0 && player->mangoCrops == 0 && player->cornCrops == 0) {
+    printf("\nNo crops available. Reducing gold instead...\n");
+    printf("-75 gold.\n");
     player->gold -= 75;
   } 
   // if have owned crops...
   else {
+    printf("\nAnimals attack, giving all crops to fend them off...\n");
     player->bananaCrops = 0;
     player->mangoCrops = 0;
     player->cornCrops = 0;
