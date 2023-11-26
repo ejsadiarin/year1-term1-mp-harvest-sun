@@ -853,7 +853,7 @@ void
 void
   typhoonCalamity(struct FarmStatus *farm) 
 {
-  printf("\n!!!!!!! INCOMING TYPHOON!\n !!!!!!!");
+  printf("\n!!!!!!! INCOMING TYPHOON! !!!!!!!\n");
   farm->untilledPlots = 30;
   farm->tilledPlots = 0;
   farm->bananaPlots = 0;
