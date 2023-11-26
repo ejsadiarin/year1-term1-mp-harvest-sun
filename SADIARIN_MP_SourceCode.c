@@ -15,7 +15,7 @@ otherwise plagiarized the work of other students and/or persons.
  *              is the key! Look out for "calamities" that challenges your very
  *              own tenacity. Play now and see what you're made of.
  * Programmed by:  Sadiarin, Edwin Jr. M., CCPROG1-S19A
- * Last modified: November 24, 2023
+ * Last modified: November 26, 2023
  * Version: 3
  * [Acknowledgements:
  * - stdbool.h library for boolean types
@@ -938,9 +938,6 @@ void
     printf("-10 gold for eating breakfast\n");
     printf("Eating breakfast... nom nom nom\n\n");
     player->gold -= 10;
-    if (player->gold <= 0) {
-      player->gold = 0;
-    }
 
     // calamities here
     if (player->day == 20 || player->day == 36 || player->day == 43) {
@@ -955,6 +952,10 @@ void
       animalsAttack(player);
     }
 
+    // gold min limit
+    if (player->gold <= 0) {
+      player->gold = 0;
+    }
 
     // reset water status for each crop type
     farm->isBananaWatered = false;
