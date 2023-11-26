@@ -667,7 +667,7 @@ void
 
     while (cropType > 3 || cropType < 0) {
       printf("\n[ INVALID INPUT ] Enter 1-3 only. (enter 0 to cancel)");
-      printf("\nEnter type of crop to sow (enter 0 to cancel): ");
+      printf("\nEnter type of crop to harvest (enter 0 to cancel): ");
       scanf(" %d", &cropType);
     }
 
@@ -845,6 +845,60 @@ void
 /* **************** FARM RELATED FUNCTIONS END ***************** */
 
 /**
+ * This function simulates a typhoon calamity that destroys ALL plots in the farm, resetting all plots to untilled plots.
+ * @note Precondition:
+ * (1) The 'farm' parameter is a pointer to a struct 'FarmStatus' containing information about the plots in the player's farm
+ * @param *farm: Pointer to a struct FarmStatus representing the farm's status
+ * */
+void
+  typhoonCalamity(struct FarmStatus *farm) 
+{
+  printf("\n!!!!!!! INCOMING TYPHOON!\n !!!!!!!");
+  farm->untilledPlots = 30;
+  farm->tilledPlots = 0;
+  farm->bananaPlots = 0;
+  farm->mangoPlots = 0;
+  farm->cornPlots = 0;
+  printf("All plots in the farm have been destroyed...\n");
+}
+
+/**
+ * This function is a "calamity" that reduces the player's gold by 50
+ * @note Precondition:
+ * (1) The 'player' parameter is a pointer to a struct 'PlayerStatus' containing information about the player's gold
+ * @param *player: Pointer to a struct PlayerStatus for mutating or reducing the existing gold of the player
+ * */
+void
+  payTaxToLand(struct PlayerStatus *player) 
+{
+  printf("Tax collector INCOMING...\n");
+  player->gold -= 50;
+  printf("-50 gold.\n");
+}
+
+/**
+ * This function is a calamity in which animals attack and the only way to fend them off is to give them all owned harvested crops.
+ * @note Precondition:
+ * (1) The 'player' parameter is a pointer to a struct 'PlayerStatus' containing information about the player's owned crops.
+ * (2) If player do not have any crops, 75 gold will be reduced instead.
+ * @param *player: Pointer to a struct PlayerStatus for mutating the own crops or reducing the existing gold of the player
+ * */
+void
+  animalsAttack(struct PlayerStatus *player) 
+{
+  // if no owned crops, reduce gold instead
+  if (player->bananaCrops == 0 && player->mangoCrops == 0 && player->cornCrops == 0) {
+    player->gold -= 75;
+  } 
+  // if have owned crops...
+  else {
+    player->bananaCrops = 0;
+    player->mangoCrops = 0;
+    player->cornCrops = 0;
+  }
+}
+
+/**
  * This function simulates the player going home, advancing to the next day, and handling daily tasks such as resetting energy, taxing gold for breakfast, and updating crop watering status on the farm. It also checks if the player is dead due to starvation using the 'checkIfDead' function.
  * @note Precondition: 
  * (1) The 'player' parameter is a valid pointer to a struct of type 'PlayerStatus' containing information about the player's current status, including gold, energy, and day. 
@@ -869,12 +923,23 @@ void
 
     printf("\n********************************* ");
     printf("Day %d", player->day);
-    printf(" *********************************\n\n");
+    printf(" *********************************\n");
 
-    // add calamities here
+    // calamities here
+    if (player->day == 20 || player->day == 36 || player->day == 43) {
+      typhoonCalamity(farm);
+    }
+
+    if (player->day == 50 || player->day == 80) {
+      payTaxToLand(player);
+    }
+
+    if (player->day == 27 || player->day == 53 || player->day == 70) {
+      animalsAttack(player);
+    }
 
     // reset energy to full
-    printf("REJUVENATED! Energy has been reset to full\n");
+    printf("\nREJUVENATED! Energy has been reset to full\n");
     player->energy = 30;
 
     // tax gold for breakfast & update hunger status
@@ -939,7 +1004,7 @@ void
     // if did not cancel proceed...
     else {
 
-      printf("\nEnter amount of bag of seeds to buy: ");
+      printf("\nEnter amount of bags of seeds to buy: ");
       scanf(" %d", &seedAmount);
 
       if (seedAmount == 0) {
@@ -951,7 +1016,7 @@ void
         // input validation
         while (seedAmount < 0) {
           printf("\n[ INVALID INPUT ] Your input amount is less than 0.");
-          printf("\nEnter amount bag of seeds to buy: ");
+          printf("\nEnter amount bags of seeds to buy: ");
           scanf(" %d", &seedAmount);
         }
 
@@ -962,7 +1027,7 @@ void
 
           // CANCEL CONDITION: if not have enough gold
           if (player->gold < finalPrice) {
-            printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
+            printf("\nNot enough gold to buy %d bags of seeds\n", seedAmount);
             exitFlag = 1;
           } else {
             // error handling negative values bypass
@@ -971,7 +1036,7 @@ void
               exitFlag = 1;
             }
             else {
-              printf("\nYou successfully bought %d bag of banana seeds!\n", seedAmount);
+              printf("\nYou successfully bought %d bags of banana seeds!\n", seedAmount);
               player->gold -= finalPrice;
               printf("-%d gold\n", finalPrice);
 
@@ -988,7 +1053,7 @@ void
 
           // CANCEL CONDITION: if not have enough gold
           if (player->gold < finalPrice) {
-            printf("\nNot enough gold to buy %d bag of seeds", seedAmount);
+            printf("\nNot enough gold to buy %d bags of seeds", seedAmount);
             exitFlag = 1;
           } else {
             // error handling negative values bypass
@@ -997,7 +1062,7 @@ void
               exitFlag = 1;
             } 
             else {
-              printf("\nYou successfully bought %d bag of mango seeds!\n", seedAmount);
+              printf("\nYou successfully bought %d bags of mango seeds!\n", seedAmount);
               player->gold -= finalPrice;
               printf("-%d gold\n", finalPrice);
 
@@ -1014,7 +1079,7 @@ void
 
           // CANCEL CONDITION: if not have enough gold
           if (player->gold < finalPrice) {
-            printf("\nNot enough gold to buy %d bag of seeds\n", seedAmount);
+            printf("\nNot enough gold to buy %d bags of seeds\n", seedAmount);
             exitFlag = 1;
           } else {
             // error handling negative values bypass
@@ -1023,7 +1088,7 @@ void
               exitFlag = 1;
             } 
             else {
-              printf("\nYou successfully bought %d bag of corn seeds!\n", seedAmount);
+              printf("\nYou successfully bought %d bags of corn seeds!\n", seedAmount);
               player->gold -= finalPrice;
               printf("-%d gold\n", finalPrice);
 
