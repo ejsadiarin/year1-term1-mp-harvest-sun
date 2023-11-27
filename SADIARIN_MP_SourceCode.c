@@ -708,6 +708,7 @@ void
         farm->canHarvestBanana = false;
         // reset water status
         farm->bananaWaterAmount = 0;
+        farm->isBananaWatered = false;
         printf("Bountiful HARVEST!\n");
         printf("You harvested %d crops of banana\n", player->bananaCrops);
         exitFlag = 1;
@@ -747,6 +748,7 @@ void
         farm->canHarvestMango = false;
         // reset water status
         farm->mangoWaterAmount = 0;
+        farm->isMangoWatered = false;
         printf("Bountiful HARVEST!\n");
         printf("You harvested %d crops of mango\n", player->mangoCrops);
         exitFlag = 1;
@@ -786,6 +788,7 @@ void
         farm->canHarvestCorn = false;
         // reset water status
         farm->cornWaterAmount = 0;
+        farm->isCornWatered = false;
         printf("Bountiful HARVEST!\n");
         printf("You harvested %d crops of corn\n", player->cornCrops);
         exitFlag = 1;
