@@ -109,6 +109,8 @@ int
 
   if (player->gold < 10) {
     player->starvedDay += 1;
+  } else {
+    player->starvedDay = 0;
   }
 
   switch (player->starvedDay) {
