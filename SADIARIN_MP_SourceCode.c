@@ -939,10 +939,15 @@ void
     printf("\nREJUVENATED! Energy has been reset to full\n");
     player->energy = 30;
 
+    if (player->gold <= 0) {
+      printf("No gold left.\n");
+    }
     // tax gold for breakfast & update hunger status
-    printf("-10 gold for eating breakfast\n");
-    printf("Eating breakfast... nom nom nom\n\n");
-    player->gold -= 10;
+    else {
+      printf("-10 gold for eating breakfast\n");
+      printf("Eating breakfast... nom nom nom\n\n");
+      player->gold -= 10;
+    }
 
     // calamities here
     if (player->day == 20 || player->day == 36 || player->day == 43) {
